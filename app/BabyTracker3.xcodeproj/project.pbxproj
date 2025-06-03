@@ -66,23 +66,15 @@
 		D1234567890ABCDEF012340 = {
 			isa = PBXGroup;
 			children = (
-				D1234567890ABCDEF012341 /* BabyTracker3 */,
-				D1234567890ABCDEF012342 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		D1234567890ABCDEF012341 /* BabyTracker3 */ = {
-			isa = PBXGroup;
-			children = (
-				D1234567890ABCDEF012343 /* Utils */,
-				D1234567890ABCDEF012344 /* Views */,
 				B1234567890ABCDEF012345 /* AppDelegate.swift */,
 				B1234567890ABCDEF012346 /* SceneDelegate.swift */,
+				D1234567890ABCDEF012343 /* Utils */,
+				D1234567890ABCDEF012344 /* Views */,
 				B1234567890ABCDEF012356 /* Assets.xcassets */,
 				B1234567890ABCDEF012357 /* LaunchScreen.storyboard */,
 				B1234567890ABCDEF012359 /* Info.plist */,
+				D1234567890ABCDEF012342 /* Products */,
 			);
-			path = BabyTracker3;
 			sourceTree = "<group>";
 		};
 		D1234567890ABCDEF012342 /* Products */ = {
@@ -348,7 +340,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BabyTracker3/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -375,7 +367,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BabyTracker3/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
