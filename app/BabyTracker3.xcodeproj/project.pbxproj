@@ -7,43 +7,53 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1234567890ABCDEF0123456 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF0123457 /* AppDelegate.swift */; };
-		1234567890ABCDEF0123458 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF0123459 /* SceneDelegate.swift */; };
-		1234567890ABCDEF012345A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF012345B /* Constants.swift */; };
-		1234567890ABCDEF012345C /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF012345D /* SplashViewController.swift */; };
-		1234567890ABCDEF012345E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF012345F /* LoginViewController.swift */; };
-		1234567890ABCDEF0123460 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF0123461 /* SignupViewController.swift */; };
-		1234567890ABCDEF0123462 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF0123463 /* MainTabBarController.swift */; };
-		1234567890ABCDEF0123464 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF0123465 /* HomeViewController.swift */; };
-		1234567890ABCDEF0123466 /* RecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF0123467 /* RecordsViewController.swift */; };
-		1234567890ABCDEF0123468 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF0123469 /* StatisticsViewController.swift */; };
-		1234567890ABCDEF012346A /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF012346B /* PhotosViewController.swift */; };
-		1234567890ABCDEF012346C /* AssistantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF012346D /* AssistantViewController.swift */; };
-		1234567890ABCDEF012346E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF012346F /* Assets.xcassets */; };
-		1234567890ABCDEF0123470 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1234567890ABCDEF0123471 /* LaunchScreen.storyboard */; };
+		A1234567890ABCDEF012345 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012345 /* AppDelegate.swift */; };
+		A1234567890ABCDEF012346 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012346 /* SceneDelegate.swift */; };
+		A1234567890ABCDEF012347 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012347 /* Constants.swift */; };
+		A1234567890ABCDEF012348 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012348 /* SplashViewController.swift */; };
+		A1234567890ABCDEF012349 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012349 /* LoginViewController.swift */; };
+		A1234567890ABCDEF01234A /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF01234A /* SignupViewController.swift */; };
+		A1234567890ABCDEF01234B /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF01234B /* MainTabBarController.swift */; };
+		A1234567890ABCDEF01234C /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF01234C /* HomeViewController.swift */; };
+		A1234567890ABCDEF01234D /* RecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF01234D /* RecordsViewController.swift */; };
+		A1234567890ABCDEF01234E /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF01234E /* StatisticsViewController.swift */; };
+		A1234567890ABCDEF01234F /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF01234F /* PhotosViewController.swift */; };
+		A1234567890ABCDEF012350 /* AssistantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012350 /* AssistantViewController.swift */; };
+		A1234567890ABCDEF012351 /* CommunityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012351 /* CommunityViewController.swift */; };
+		A1234567890ABCDEF012352 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012352 /* SettingsViewController.swift */; };
+		A1234567890ABCDEF012353 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012353 /* NotificationsViewController.swift */; };
+		A1234567890ABCDEF012354 /* DataExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012354 /* DataExportViewController.swift */; };
+		A1234567890ABCDEF012355 /* BackupRestoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012355 /* BackupRestoreViewController.swift */; };
+		A1234567890ABCDEF012356 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012356 /* Assets.xcassets */; };
+		A1234567890ABCDEF012357 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012357 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1234567890ABCDEF0123456 /* BabyTracker3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabyTracker3.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1234567890ABCDEF0123457 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF0123459 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF012345B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF012345D /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF012345F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF0123461 /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF0123463 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF0123465 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF0123467 /* RecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsViewController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF0123469 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF012346B /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF012346D /* AssistantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantViewController.swift; sourceTree = "<group>"; };
-		1234567890ABCDEF012346F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		1234567890ABCDEF0123472 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		1234567890ABCDEF0123474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B1234567890ABCDEF012340 /* BabyTracker3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabyTracker3.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1234567890ABCDEF012345 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012346 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012347 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012348 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012349 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF01234A /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF01234B /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF01234C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF01234D /* RecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF01234E /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF01234F /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012350 /* AssistantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012351 /* CommunityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012352 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012353 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012354 /* DataExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012355 /* BackupRestoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRestoreViewController.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012356 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B1234567890ABCDEF012358 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B1234567890ABCDEF012359 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1234567890ABCDEF0123475 /* Frameworks */ = {
+		C1234567890ABCDEF012340 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -53,56 +63,61 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1234567890ABCDEF0123476 /* Products */ = {
+		D1234567890ABCDEF012340 = {
 			isa = PBXGroup;
 			children = (
-				1234567890ABCDEF0123456 /* BabyTracker3.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		1234567890ABCDEF0123477 = {
-			isa = PBXGroup;
-			children = (
-				1234567890ABCDEF0123478 /* BabyTracker3 */,
-				1234567890ABCDEF0123476 /* Products */,
+				D1234567890ABCDEF012341 /* BabyTracker3 */,
+				D1234567890ABCDEF012342 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		1234567890ABCDEF0123478 /* BabyTracker3 */ = {
+		D1234567890ABCDEF012341 /* BabyTracker3 */ = {
 			isa = PBXGroup;
 			children = (
-				1234567890ABCDEF0123479 /* Utils */,
-				1234567890ABCDEF012347A /* Views */,
-				1234567890ABCDEF0123457 /* AppDelegate.swift */,
-				1234567890ABCDEF0123459 /* SceneDelegate.swift */,
-				1234567890ABCDEF012346F /* Assets.xcassets */,
-				1234567890ABCDEF0123471 /* LaunchScreen.storyboard */,
-				1234567890ABCDEF0123474 /* Info.plist */,
+				D1234567890ABCDEF012343 /* Utils */,
+				D1234567890ABCDEF012344 /* Views */,
+				B1234567890ABCDEF012345 /* AppDelegate.swift */,
+				B1234567890ABCDEF012346 /* SceneDelegate.swift */,
+				B1234567890ABCDEF012356 /* Assets.xcassets */,
+				B1234567890ABCDEF012357 /* LaunchScreen.storyboard */,
+				B1234567890ABCDEF012359 /* Info.plist */,
 			);
 			path = BabyTracker3;
 			sourceTree = "<group>";
 		};
-		1234567890ABCDEF0123479 /* Utils */ = {
+		D1234567890ABCDEF012342 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1234567890ABCDEF012345B /* Constants.swift */,
+				B1234567890ABCDEF012340 /* BabyTracker3.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D1234567890ABCDEF012343 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B1234567890ABCDEF012347 /* Constants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		1234567890ABCDEF012347A /* Views */ = {
+		D1234567890ABCDEF012344 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1234567890ABCDEF012345D /* SplashViewController.swift */,
-				1234567890ABCDEF012345F /* LoginViewController.swift */,
-				1234567890ABCDEF0123461 /* SignupViewController.swift */,
-				1234567890ABCDEF0123463 /* MainTabBarController.swift */,
-				1234567890ABCDEF0123465 /* HomeViewController.swift */,
-				1234567890ABCDEF0123467 /* RecordsViewController.swift */,
-				1234567890ABCDEF0123469 /* StatisticsViewController.swift */,
-				1234567890ABCDEF012346B /* PhotosViewController.swift */,
-				1234567890ABCDEF012346D /* AssistantViewController.swift */,
+				B1234567890ABCDEF012348 /* SplashViewController.swift */,
+				B1234567890ABCDEF012349 /* LoginViewController.swift */,
+				B1234567890ABCDEF01234A /* SignupViewController.swift */,
+				B1234567890ABCDEF01234B /* MainTabBarController.swift */,
+				B1234567890ABCDEF01234C /* HomeViewController.swift */,
+				B1234567890ABCDEF01234D /* RecordsViewController.swift */,
+				B1234567890ABCDEF01234E /* StatisticsViewController.swift */,
+				B1234567890ABCDEF01234F /* PhotosViewController.swift */,
+				B1234567890ABCDEF012350 /* AssistantViewController.swift */,
+				B1234567890ABCDEF012351 /* CommunityViewController.swift */,
+				B1234567890ABCDEF012352 /* SettingsViewController.swift */,
+				B1234567890ABCDEF012353 /* NotificationsViewController.swift */,
+				B1234567890ABCDEF012354 /* DataExportViewController.swift */,
+				B1234567890ABCDEF012355 /* BackupRestoreViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -110,13 +125,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1234567890ABCDEF012347B /* BabyTracker3 */ = {
+		E1234567890ABCDEF012340 /* BabyTracker3 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1234567890ABCDEF012347C /* Build configuration list for PBXNativeTarget "BabyTracker3" */;
+			buildConfigurationList = F1234567890ABCDEF012340 /* Build configuration list for PBXNativeTarget "BabyTracker3" */;
 			buildPhases = (
-				1234567890ABCDEF0123475 /* Frameworks */,
-				1234567890ABCDEF012347D /* Sources */,
-				1234567890ABCDEF012347E /* Resources */,
+				E1234567890ABCDEF012341 /* Sources */,
+				C1234567890ABCDEF012340 /* Frameworks */,
+				E1234567890ABCDEF012342 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -124,25 +139,25 @@
 			);
 			name = BabyTracker3;
 			productName = BabyTracker3;
-			productReference = 1234567890ABCDEF0123456 /* BabyTracker3.app */;
+			productReference = B1234567890ABCDEF012340 /* BabyTracker3.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		1234567890ABCDEF012347F /* Project object */ = {
+		G1234567890ABCDEF012340 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					1234567890ABCDEF012347B = {
-						CreatedOnToolsVersion = 14.3;
+					E1234567890ABCDEF012340 = {
+						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
-			buildConfigurationList = 1234567890ABCDEF0123480 /* Build configuration list for PBXProject "BabyTracker3" */;
+			buildConfigurationList = F1234567890ABCDEF012341 /* Build configuration list for PBXProject "BabyTracker3" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -150,55 +165,60 @@
 				en,
 				Base,
 			);
-			mainGroup = 1234567890ABCDEF0123477;
-			productRefGroup = 1234567890ABCDEF0123476 /* Products */;
+			mainGroup = D1234567890ABCDEF012340;
+			productRefGroup = D1234567890ABCDEF012342 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1234567890ABCDEF012347B /* BabyTracker3 */,
+				E1234567890ABCDEF012340 /* BabyTracker3 */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		1234567890ABCDEF012347E /* Resources */ = {
+		E1234567890ABCDEF012342 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1234567890ABCDEF0123470 /* LaunchScreen.storyboard in Resources */,
-				1234567890ABCDEF012346E /* Assets.xcassets in Resources */,
+				A1234567890ABCDEF012357 /* LaunchScreen.storyboard in Resources */,
+				A1234567890ABCDEF012356 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		1234567890ABCDEF012347D /* Sources */ = {
+		E1234567890ABCDEF012341 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1234567890ABCDEF012345E /* LoginViewController.swift in Sources */,
-				1234567890ABCDEF0123464 /* HomeViewController.swift in Sources */,
-				1234567890ABCDEF0123468 /* StatisticsViewController.swift in Sources */,
-				1234567890ABCDEF012346C /* AssistantViewController.swift in Sources */,
-				1234567890ABCDEF0123460 /* SignupViewController.swift in Sources */,
-				1234567890ABCDEF0123466 /* RecordsViewController.swift in Sources */,
-				1234567890ABCDEF012345C /* SplashViewController.swift in Sources */,
-				1234567890ABCDEF012346A /* PhotosViewController.swift in Sources */,
-				1234567890ABCDEF0123462 /* MainTabBarController.swift in Sources */,
-				1234567890ABCDEF012345A /* Constants.swift in Sources */,
-				1234567890ABCDEF0123458 /* SceneDelegate.swift in Sources */,
-				1234567890ABCDEF0123456 /* AppDelegate.swift in Sources */,
+				A1234567890ABCDEF012345 /* AppDelegate.swift in Sources */,
+				A1234567890ABCDEF012346 /* SceneDelegate.swift in Sources */,
+				A1234567890ABCDEF012347 /* Constants.swift in Sources */,
+				A1234567890ABCDEF012348 /* SplashViewController.swift in Sources */,
+				A1234567890ABCDEF012349 /* LoginViewController.swift in Sources */,
+				A1234567890ABCDEF01234A /* SignupViewController.swift in Sources */,
+				A1234567890ABCDEF01234B /* MainTabBarController.swift in Sources */,
+				A1234567890ABCDEF01234C /* HomeViewController.swift in Sources */,
+				A1234567890ABCDEF01234D /* RecordsViewController.swift in Sources */,
+				A1234567890ABCDEF01234E /* StatisticsViewController.swift in Sources */,
+				A1234567890ABCDEF01234F /* PhotosViewController.swift in Sources */,
+				A1234567890ABCDEF012350 /* AssistantViewController.swift in Sources */,
+				A1234567890ABCDEF012351 /* CommunityViewController.swift in Sources */,
+				A1234567890ABCDEF012352 /* SettingsViewController.swift in Sources */,
+				A1234567890ABCDEF012353 /* NotificationsViewController.swift in Sources */,
+				A1234567890ABCDEF012354 /* DataExportViewController.swift in Sources */,
+				A1234567890ABCDEF012355 /* BackupRestoreViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		1234567890ABCDEF0123471 /* LaunchScreen.storyboard */ = {
+		B1234567890ABCDEF012357 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1234567890ABCDEF0123472 /* Base */,
+				B1234567890ABCDEF012358 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -206,7 +226,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		1234567890ABCDEF0123481 /* Debug */ = {
+		H1234567890ABCDEF012340 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -256,7 +276,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -266,7 +286,7 @@
 			};
 			name = Debug;
 		};
-		1234567890ABCDEF0123482 /* Release */ = {
+		H1234567890ABCDEF012341 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -310,7 +330,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -320,26 +340,26 @@
 			};
 			name = Release;
 		};
-		1234567890ABCDEF0123483 /* Debug */ = {
+		H1234567890ABCDEF012342 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BabyTracker3/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.BabyTracker3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babytracker.BabyTracker3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -347,26 +367,26 @@
 			};
 			name = Debug;
 		};
-		1234567890ABCDEF0123484 /* Release */ = {
+		H1234567890ABCDEF012343 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BabyTracker3/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.BabyTracker3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.babytracker.BabyTracker3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -377,25 +397,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1234567890ABCDEF012347C /* Build configuration list for PBXNativeTarget "BabyTracker3" */ = {
+		F1234567890ABCDEF012340 /* Build configuration list for PBXNativeTarget "BabyTracker3" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1234567890ABCDEF0123483 /* Debug */,
-				1234567890ABCDEF0123484 /* Release */,
+				H1234567890ABCDEF012342 /* Debug */,
+				H1234567890ABCDEF012343 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1234567890ABCDEF0123480 /* Build configuration list for PBXProject "BabyTracker3" */ = {
+		F1234567890ABCDEF012341 /* Build configuration list for PBXProject "BabyTracker3" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1234567890ABCDEF0123481 /* Debug */,
-				1234567890ABCDEF0123482 /* Release */,
+				H1234567890ABCDEF012340 /* Debug */,
+				H1234567890ABCDEF012341 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 1234567890ABCDEF012347F /* Project object */;
+	rootObject = G1234567890ABCDEF012340 /* Project object */;
 } 
