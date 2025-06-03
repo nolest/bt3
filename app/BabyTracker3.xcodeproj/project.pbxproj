@@ -26,6 +26,9 @@
 		A1234567890ABCDEF012355 /* BackupRestoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012355 /* BackupRestoreViewController.swift */; };
 		A1234567890ABCDEF012356 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012356 /* Assets.xcassets */; };
 		A1234567890ABCDEF012357 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012357 /* LaunchScreen.storyboard */; };
+		A1234567890ABCDEF012358 /* BabyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012358 /* BabyRecord.swift */; };
+		A1234567890ABCDEF012359 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF012359 /* DataManager.swift */; };
+		A1234567890ABCDEF01235A /* SampleDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1234567890ABCDEF01235A /* SampleDataGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +53,9 @@
 		B1234567890ABCDEF012356 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B1234567890ABCDEF012358 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B1234567890ABCDEF012359 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B1234567890ABCDEF012358 /* BabyRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyRecord.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF012359 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		B1234567890ABCDEF01235A /* SampleDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +75,8 @@
 				B1234567890ABCDEF012345 /* AppDelegate.swift */,
 				B1234567890ABCDEF012346 /* SceneDelegate.swift */,
 				D1234567890ABCDEF012343 /* Utils */,
+				D1234567890ABCDEF012360 /* Models */,
+				D1234567890ABCDEF012361 /* Managers */,
 				D1234567890ABCDEF012344 /* Views */,
 				B1234567890ABCDEF012356 /* Assets.xcassets */,
 				B1234567890ABCDEF012357 /* LaunchScreen.storyboard */,
@@ -89,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				B1234567890ABCDEF012347 /* Constants.swift */,
+				B1234567890ABCDEF01235A /* SampleDataGenerator.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -112,6 +121,22 @@
 				B1234567890ABCDEF012355 /* BackupRestoreViewController.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		D1234567890ABCDEF012360 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B1234567890ABCDEF012358 /* BabyRecord.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D1234567890ABCDEF012361 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				B1234567890ABCDEF012359 /* DataManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +212,9 @@
 				A1234567890ABCDEF012345 /* AppDelegate.swift in Sources */,
 				A1234567890ABCDEF012346 /* SceneDelegate.swift in Sources */,
 				A1234567890ABCDEF012347 /* Constants.swift in Sources */,
+				A1234567890ABCDEF01235A /* SampleDataGenerator.swift in Sources */,
+				A1234567890ABCDEF012358 /* BabyRecord.swift in Sources */,
+				A1234567890ABCDEF012359 /* DataManager.swift in Sources */,
 				A1234567890ABCDEF012348 /* SplashViewController.swift in Sources */,
 				A1234567890ABCDEF012349 /* LoginViewController.swift in Sources */,
 				A1234567890ABCDEF01234A /* SignupViewController.swift in Sources */,

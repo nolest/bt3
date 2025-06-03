@@ -2,10 +2,12 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
+    private let dataManager = DataManager.shared
+    
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsVerticalScrollIndicator = false
+        scrollView.backgroundColor = Constants.Colors.backgroundColor
         return scrollView
     }()
     
@@ -15,411 +17,496 @@ class HomeViewController: UIViewController {
         return view
     }()
     
-    private let headerView: UIView = {
+    private let welcomeLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.textColor = Constants.Colors.primaryTextColor
+        label.text = "今日概覽"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let babyInfoCard: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.Colors.primaryColor
-        view.layer.cornerRadius = Constants.CornerRadius.large
-        view.clipsToBounds = true
+        view.backgroundColor = UIColor.systemBackground
+        view.layer.cornerRadius = 12
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 4
+        view.layer.shadowOpacity = 0.1
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private let babyImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 35
-        imageView.backgroundColor = Constants.Colors.cardBackgroundColor
-        imageView.image = UIImage(systemName: "person.crop.circle.fill")
-        imageView.tintColor = Constants.Colors.primaryLightColor
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
     private let babyNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "小寶寶"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.title, weight: .bold)
-        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textColor = Constants.Colors.primaryTextColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let babyAgeLabel: UILabel = {
         let label = UILabel()
-        label.text = "3個月21天"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.body)
-        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = Constants.Colors.secondaryTextColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let statusView: UIView = {
-        let view = UIView()
-        view.backgroundColor = Constants.Colors.cardBackgroundColor
-        view.layer.cornerRadius = Constants.CornerRadius.medium
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = 4
-        view.layer.shadowOpacity = 0.1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let statusTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "當前狀態"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.subtitle, weight: .bold)
-        label.textColor = Constants.Colors.primaryTextColor
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let statusStackView: UIStackView = {
+    private let statsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .equalSpacing
-        stackView.alignment = .center
+        stackView.distribution = .fillEqually
+        stackView.spacing = 12
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    private let activitySectionView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let activityTitleLabel: UILabel = {
+    private let quickActionsLabel: UILabel = {
         let label = UILabel()
-        label.text = "今日活動"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.subtitle, weight: .bold)
+        label.text = "快速記錄"
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = Constants.Colors.primaryTextColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let activityCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = Constants.Spacing.medium
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: Constants.Spacing.medium, bottom: 0, right: Constants.Spacing.medium)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(ActivityCell.self, forCellWithReuseIdentifier: "ActivityCell")
-        return collectionView
+    private let quickActionsStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 12
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
     
-    private let reminderSectionView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let reminderTitleLabel: UILabel = {
+    private let recentRecordsLabel: UILabel = {
         let label = UILabel()
-        label.text = "即將到來的提醒"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.subtitle, weight: .bold)
+        label.text = "最近記錄"
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = Constants.Colors.primaryTextColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let reminderCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = Constants.Spacing.medium
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.isScrollEnabled = false
-        collectionView.register(ReminderCell.self, forCellWithReuseIdentifier: "ReminderCell")
-        return collectionView
+    private let recentRecordsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = UIColor.systemBackground
+        tableView.layer.cornerRadius = 12
+        tableView.separatorStyle = .none
+        tableView.isScrollEnabled = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
     }()
     
-    // 模拟数据
-    private let activities: [(title: String, icon: String, time: String)] = [
-        ("餵奶", "drop.fill", "08:30"),
-        ("換尿布", "wind", "09:15"),
-        ("睡覺", "bed.double.fill", "10:00"),
-        ("洗澡", "shower.fill", "18:30")
-    ]
-    
-    private let reminders: [(title: String, time: String, icon: String)] = [
-        ("餵奶時間", "11:30", "clock.fill"),
-        ("睡覺時間", "13:00", "bed.double.fill")
-    ]
+    private var recentRecords: [any BabyRecord] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        setupTableView()
+        setupNotifications()
+        loadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadData()
+    }
+    
+    private func setupUI() {
         view.backgroundColor = Constants.Colors.backgroundColor
+        title = "今日"
         
-        setupNavigationBar()
-        setupViews()
-        setupCollectionViews()
-        setupStatusIcons()
-    }
-    
-    private func setupNavigationBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell.fill"), style: .plain, target: self, action: #selector(notificationButtonTapped))
-        
-        if #available(iOS 15.0, *) {
-            navigationItem.rightBarButtonItem?.tintColor = Constants.Colors.primaryColor
-        }
-    }
-    
-    private func setupViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        contentView.addSubview(headerView)
-        headerView.addSubview(babyImageView)
-        headerView.addSubview(babyNameLabel)
-        headerView.addSubview(babyAgeLabel)
+        contentView.addSubview(welcomeLabel)
+        contentView.addSubview(babyInfoCard)
+        contentView.addSubview(statsStackView)
+        contentView.addSubview(quickActionsLabel)
+        contentView.addSubview(quickActionsStackView)
+        contentView.addSubview(recentRecordsLabel)
+        contentView.addSubview(recentRecordsTableView)
         
-        contentView.addSubview(statusView)
-        statusView.addSubview(statusTitleLabel)
-        statusView.addSubview(statusStackView)
-        
-        contentView.addSubview(activitySectionView)
-        activitySectionView.addSubview(activityTitleLabel)
-        activitySectionView.addSubview(activityCollectionView)
-        
-        contentView.addSubview(reminderSectionView)
-        reminderSectionView.addSubview(reminderTitleLabel)
-        reminderSectionView.addSubview(reminderCollectionView)
+        setupBabyInfoCard()
+        setupStatsCards()
+        setupQuickActions()
+        setupConstraints()
+    }
+    
+    private func setupBabyInfoCard() {
+        babyInfoCard.addSubview(babyNameLabel)
+        babyInfoCard.addSubview(babyAgeLabel)
         
         NSLayoutConstraint.activate([
-            // 滚动视图约束
+            babyNameLabel.topAnchor.constraint(equalTo: babyInfoCard.topAnchor, constant: 16),
+            babyNameLabel.leadingAnchor.constraint(equalTo: babyInfoCard.leadingAnchor, constant: 16),
+            babyNameLabel.trailingAnchor.constraint(equalTo: babyInfoCard.trailingAnchor, constant: -16),
+            
+            babyAgeLabel.topAnchor.constraint(equalTo: babyNameLabel.bottomAnchor, constant: 4),
+            babyAgeLabel.leadingAnchor.constraint(equalTo: babyInfoCard.leadingAnchor, constant: 16),
+            babyAgeLabel.trailingAnchor.constraint(equalTo: babyInfoCard.trailingAnchor, constant: -16),
+            babyAgeLabel.bottomAnchor.constraint(equalTo: babyInfoCard.bottomAnchor, constant: -16)
+        ])
+    }
+    
+    private func setupStatsCards() {
+        let feedingCard = createStatCard(title: "餵奶", value: "0次", subtitle: "今日", icon: "drop.fill")
+        let diaperCard = createStatCard(title: "換尿布", value: "0次", subtitle: "今日", icon: "tshirt.fill")
+        let sleepCard = createStatCard(title: "睡眠", value: "0小時", subtitle: "今日", icon: "moon.fill")
+        
+        statsStackView.addArrangedSubview(feedingCard)
+        statsStackView.addArrangedSubview(diaperCard)
+        statsStackView.addArrangedSubview(sleepCard)
+    }
+    
+    private func setupQuickActions() {
+        let feedingButton = createQuickActionButton(title: "餵奶", icon: "drop.fill", action: #selector(quickFeedingTapped))
+        let diaperButton = createQuickActionButton(title: "換尿布", icon: "tshirt.fill", action: #selector(quickDiaperTapped))
+        let sleepButton = createQuickActionButton(title: "睡眠", icon: "moon.fill", action: #selector(quickSleepTapped))
+        let growthButton = createQuickActionButton(title: "成長", icon: "ruler.fill", action: #selector(quickGrowthTapped))
+        
+        quickActionsStackView.addArrangedSubview(feedingButton)
+        quickActionsStackView.addArrangedSubview(diaperButton)
+        quickActionsStackView.addArrangedSubview(sleepButton)
+        quickActionsStackView.addArrangedSubview(growthButton)
+    }
+    
+    private func setupTableView() {
+        recentRecordsTableView.delegate = self
+        recentRecordsTableView.dataSource = self
+        recentRecordsTableView.register(RecordTableViewCell.self, forCellReuseIdentifier: "RecordCell")
+    }
+    
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(recordsDidUpdate),
+            name: DataManager.recordsDidUpdateNotification,
+            object: nil
+        )
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // 内容视图约束
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            // 头部视图约束
-            headerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.Spacing.medium),
-            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.medium),
-            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.medium),
-            headerView.heightAnchor.constraint(equalToConstant: 150),
+            welcomeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            welcomeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            welcomeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            // 宝宝图像约束
-            babyImageView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: Constants.Spacing.large),
-            babyImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
-            babyImageView.widthAnchor.constraint(equalToConstant: 70),
-            babyImageView.heightAnchor.constraint(equalToConstant: 70),
+            babyInfoCard.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 16),
+            babyInfoCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            babyInfoCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            // 宝宝名称标签约束
-            babyNameLabel.leadingAnchor.constraint(equalTo: babyImageView.trailingAnchor, constant: Constants.Spacing.medium),
-            babyNameLabel.topAnchor.constraint(equalTo: babyImageView.topAnchor, constant: Constants.Spacing.small),
-            babyNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor, constant: -Constants.Spacing.medium),
+            statsStackView.topAnchor.constraint(equalTo: babyInfoCard.bottomAnchor, constant: 20),
+            statsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            statsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            statsStackView.heightAnchor.constraint(equalToConstant: 100),
             
-            // 宝宝年龄标签约束
-            babyAgeLabel.leadingAnchor.constraint(equalTo: babyNameLabel.leadingAnchor),
-            babyAgeLabel.topAnchor.constraint(equalTo: babyNameLabel.bottomAnchor, constant: Constants.Spacing.small),
-            babyAgeLabel.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor, constant: -Constants.Spacing.medium),
+            quickActionsLabel.topAnchor.constraint(equalTo: statsStackView.bottomAnchor, constant: 24),
+            quickActionsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            quickActionsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            // 状态视图约束
-            statusView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -25),
-            statusView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            statusView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
-            statusView.heightAnchor.constraint(equalToConstant: 100),
+            quickActionsStackView.topAnchor.constraint(equalTo: quickActionsLabel.bottomAnchor, constant: 12),
+            quickActionsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            quickActionsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            quickActionsStackView.heightAnchor.constraint(equalToConstant: 80),
             
-            // 状态标题标签约束
-            statusTitleLabel.topAnchor.constraint(equalTo: statusView.topAnchor, constant: Constants.Spacing.medium),
-            statusTitleLabel.leadingAnchor.constraint(equalTo: statusView.leadingAnchor, constant: Constants.Spacing.medium),
-            statusTitleLabel.trailingAnchor.constraint(equalTo: statusView.trailingAnchor, constant: -Constants.Spacing.medium),
+            recentRecordsLabel.topAnchor.constraint(equalTo: quickActionsStackView.bottomAnchor, constant: 24),
+            recentRecordsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            recentRecordsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            // 状态栈视图约束
-            statusStackView.topAnchor.constraint(equalTo: statusTitleLabel.bottomAnchor, constant: Constants.Spacing.medium),
-            statusStackView.leadingAnchor.constraint(equalTo: statusView.leadingAnchor, constant: Constants.Spacing.large),
-            statusStackView.trailingAnchor.constraint(equalTo: statusView.trailingAnchor, constant: -Constants.Spacing.large),
-            statusStackView.bottomAnchor.constraint(equalTo: statusView.bottomAnchor, constant: -Constants.Spacing.medium),
-            
-            // 活动部分视图约束
-            activitySectionView.topAnchor.constraint(equalTo: statusView.bottomAnchor, constant: Constants.Spacing.large),
-            activitySectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            activitySectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            activitySectionView.heightAnchor.constraint(equalToConstant: 180),
-            
-            // 活动标题标签约束
-            activityTitleLabel.topAnchor.constraint(equalTo: activitySectionView.topAnchor),
-            activityTitleLabel.leadingAnchor.constraint(equalTo: activitySectionView.leadingAnchor, constant: Constants.Spacing.large),
-            activityTitleLabel.trailingAnchor.constraint(equalTo: activitySectionView.trailingAnchor, constant: -Constants.Spacing.large),
-            
-            // 活动集合视图约束
-            activityCollectionView.topAnchor.constraint(equalTo: activityTitleLabel.bottomAnchor, constant: Constants.Spacing.medium),
-            activityCollectionView.leadingAnchor.constraint(equalTo: activitySectionView.leadingAnchor),
-            activityCollectionView.trailingAnchor.constraint(equalTo: activitySectionView.trailingAnchor),
-            activityCollectionView.bottomAnchor.constraint(equalTo: activitySectionView.bottomAnchor),
-            
-            // 提醒部分视图约束
-            reminderSectionView.topAnchor.constraint(equalTo: activitySectionView.bottomAnchor, constant: Constants.Spacing.medium),
-            reminderSectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            reminderSectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            // 提醒标题标签约束
-            reminderTitleLabel.topAnchor.constraint(equalTo: reminderSectionView.topAnchor),
-            reminderTitleLabel.leadingAnchor.constraint(equalTo: reminderSectionView.leadingAnchor, constant: Constants.Spacing.large),
-            reminderTitleLabel.trailingAnchor.constraint(equalTo: reminderSectionView.trailingAnchor, constant: -Constants.Spacing.large),
-            
-            // 提醒集合视图约束
-            reminderCollectionView.topAnchor.constraint(equalTo: reminderTitleLabel.bottomAnchor, constant: Constants.Spacing.medium),
-            reminderCollectionView.leadingAnchor.constraint(equalTo: reminderSectionView.leadingAnchor, constant: Constants.Spacing.large),
-            reminderCollectionView.trailingAnchor.constraint(equalTo: reminderSectionView.trailingAnchor, constant: -Constants.Spacing.large),
-            reminderCollectionView.heightAnchor.constraint(equalToConstant: CGFloat(reminders.count * 80)),
-            reminderCollectionView.bottomAnchor.constraint(equalTo: reminderSectionView.bottomAnchor),
-            
-            // 内容视图底部约束
-            reminderSectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.Spacing.extraLarge)
+            recentRecordsTableView.topAnchor.constraint(equalTo: recentRecordsLabel.bottomAnchor, constant: 12),
+            recentRecordsTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            recentRecordsTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            recentRecordsTableView.heightAnchor.constraint(equalToConstant: 300),
+            recentRecordsTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
-    private func setupCollectionViews() {
-        activityCollectionView.dataSource = self
-        activityCollectionView.delegate = self
+    private func createStatCard(title: String, value: String, subtitle: String, icon: String) -> UIView {
+        let card = UIView()
+        card.backgroundColor = UIColor.systemBackground
+        card.layer.cornerRadius = 12
+        card.layer.shadowColor = UIColor.black.cgColor
+        card.layer.shadowOffset = CGSize(width: 0, height: 2)
+        card.layer.shadowRadius = 4
+        card.layer.shadowOpacity = 0.1
         
-        reminderCollectionView.dataSource = self
-        reminderCollectionView.delegate = self
-    }
-    
-    private func setupStatusIcons() {
-        // 添加状态图标
-        let statusItems = [
-            ("最近餵奶", "1小時前", "drop.fill"),
-            ("最近睡眠", "30分鐘前", "bed.double.fill"),
-            ("最近換尿布", "45分鐘前", "wind")
-        ]
-        
-        for (title, time, iconName) in statusItems {
-            let statusItemView = createStatusItemView(title: title, time: time, iconName: iconName)
-            statusStackView.addArrangedSubview(statusItemView)
-        }
-    }
-    
-    private func createStatusItemView(title: String, time: String, iconName: String) -> UIView {
-        let containerView = UIView()
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let iconView = UIImageView()
-        iconView.image = UIImage(systemName: iconName)
-        iconView.tintColor = Constants.Colors.primaryColor
-        iconView.contentMode = .scaleAspectFit
-        iconView.translatesAutoresizingMaskIntoConstraints = false
+        let iconImageView = UIImageView()
+        iconImageView.image = UIImage(systemName: icon)
+        iconImageView.tintColor = Constants.Colors.primaryColor
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
         
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.font = UIFont.systemFont(ofSize: Constants.FontSize.caption)
-        titleLabel.textColor = Constants.Colors.primaryTextColor
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = UIFont.systemFont(ofSize: 12)
+        titleLabel.textColor = Constants.Colors.secondaryTextColor
         titleLabel.textAlignment = .center
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        let timeLabel = UILabel()
-        timeLabel.text = time
-        timeLabel.font = UIFont.systemFont(ofSize: Constants.FontSize.caption - 2)
-        timeLabel.textColor = Constants.Colors.secondaryTextColor
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.textAlignment = .center
+        let valueLabel = UILabel()
+        valueLabel.text = value
+        valueLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        valueLabel.textColor = Constants.Colors.primaryTextColor
+        valueLabel.textAlignment = .center
+        valueLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        containerView.addSubview(iconView)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(timeLabel)
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = subtitle
+        subtitleLabel.font = UIFont.systemFont(ofSize: 10)
+        subtitleLabel.textColor = Constants.Colors.secondaryTextColor
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        card.addSubview(iconImageView)
+        card.addSubview(titleLabel)
+        card.addSubview(valueLabel)
+        card.addSubview(subtitleLabel)
         
         NSLayoutConstraint.activate([
-            containerView.widthAnchor.constraint(equalToConstant: 80),
+            iconImageView.topAnchor.constraint(equalTo: card.topAnchor, constant: 8),
+            iconImageView.centerXAnchor.constraint(equalTo: card.centerXAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.heightAnchor.constraint(equalToConstant: 24),
             
-            iconView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            iconView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            iconView.widthAnchor.constraint(equalToConstant: 24),
-            iconView.heightAnchor.constraint(equalToConstant: 24),
+            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 4),
+            titleLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 4),
+            titleLabel.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -4),
             
-            titleLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 4),
-            titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            valueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
+            valueLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 4),
+            valueLabel.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -4),
             
-            timeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
-            timeLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            timeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            timeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            timeLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            subtitleLabel.topAnchor.constraint(equalTo: valueLabel.bottomAnchor, constant: 2),
+            subtitleLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 4),
+            subtitleLabel.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -4),
+            subtitleLabel.bottomAnchor.constraint(lessThanOrEqualTo: card.bottomAnchor, constant: -8)
         ])
         
-        return containerView
+        // 存储标签以便后续更新
+        card.tag = title.hashValue
+        valueLabel.tag = 100 // 用于识别value标签
+        
+        return card
     }
     
-    @objc private func notificationButtonTapped() {
-        // 处理通知按钮点击
-        print("通知按钮点击")
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-extension HomeViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == activityCollectionView {
-            return activities.count
-        } else if collectionView == reminderCollectionView {
-            return reminders.count
-        }
-        return 0
+    private func createQuickActionButton(title: String, icon: String, action: Selector) -> UIButton {
+        let button = UIButton(type: .system)
+        button.backgroundColor = Constants.Colors.primaryColor
+        button.layer.cornerRadius = 12
+        button.tintColor = .white
+        
+        let iconImageView = UIImageView()
+        iconImageView.image = UIImage(systemName: icon)
+        iconImageView.tintColor = .white
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = UIFont.systemFont(ofSize: 12)
+        titleLabel.textColor = .white
+        titleLabel.textAlignment = .center
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.addSubview(iconImageView)
+        button.addSubview(titleLabel)
+        
+        NSLayoutConstraint.activate([
+            iconImageView.topAnchor.constraint(equalTo: button.topAnchor, constant: 12),
+            iconImageView.centerXAnchor.constraint(equalTo: button.centerXAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.heightAnchor.constraint(equalToConstant: 24),
+            
+            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 4),
+            titleLabel.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -4),
+            titleLabel.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: -8)
+        ])
+        
+        button.addTarget(self, action: action, for: .touchUpInside)
+        
+        return button
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == activityCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActivityCell", for: indexPath) as! ActivityCell
-            let activity = activities[indexPath.item]
-            cell.configure(title: activity.title, iconName: activity.icon, time: activity.time)
-            return cell
-        } else if collectionView == reminderCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ReminderCell", for: indexPath) as! ReminderCell
-            let reminder = reminders[indexPath.item]
-            cell.configure(title: reminder.title, time: reminder.time, iconName: reminder.icon)
-            return cell
+    private func loadData() {
+        updateBabyInfo()
+        updateStats()
+        updateRecentRecords()
+    }
+    
+    private func updateBabyInfo() {
+        if let baby = dataManager.babyProfile {
+            babyNameLabel.text = baby.name
+            babyAgeLabel.text = baby.ageDescription
+        } else {
+            babyNameLabel.text = "請設置寶寶資料"
+            babyAgeLabel.text = "點擊設置頁面添加寶寶信息"
         }
-        return UICollectionViewCell()
+    }
+    
+    private func updateStats() {
+        let stats = dataManager.getTodayStats()
+        
+        // 更新统计卡片
+        updateStatCard(title: "餵奶", value: "\(stats.feedingCount)次")
+        updateStatCard(title: "換尿布", value: "\(stats.diaperCount)次")
+        updateStatCard(title: "睡眠", value: stats.sleepDurationFormatted)
+    }
+    
+    private func updateStatCard(title: String, value: String) {
+        let tag = title.hashValue
+        if let card = statsStackView.viewWithTag(tag),
+           let valueLabel = card.viewWithTag(100) as? UILabel {
+            valueLabel.text = value
+        }
+    }
+    
+    private func updateRecentRecords() {
+        recentRecords = dataManager.getRecentRecords(limit: 5)
+        recentRecordsTableView.reloadData()
+        
+        // 更新表格高度
+        let height = min(CGFloat(recentRecords.count * 60), 300)
+        recentRecordsTableView.constraints.first { $0.firstAttribute == .height }?.constant = height
+    }
+    
+    @objc private func recordsDidUpdate() {
+        DispatchQueue.main.async {
+            self.loadData()
+        }
+    }
+    
+    // MARK: - Quick Actions
+    @objc private func quickFeedingTapped() {
+        showFeedingRecordDialog()
+    }
+    
+    @objc private func quickDiaperTapped() {
+        showDiaperRecordDialog()
+    }
+    
+    @objc private func quickSleepTapped() {
+        showSleepRecordDialog()
+    }
+    
+    @objc private func quickGrowthTapped() {
+        showGrowthRecordDialog()
+    }
+    
+    private func showFeedingRecordDialog() {
+        let alertController = UIAlertController(title: "餵奶記錄", message: "選擇餵奶類型", preferredStyle: .actionSheet)
+        
+        for feedingType in FeedingRecord.FeedingType.allCases {
+            alertController.addAction(UIAlertAction(title: feedingType.displayName, style: .default) { _ in
+                let record = FeedingRecord(feedingType: feedingType)
+                self.dataManager.addRecord(record)
+                self.showSuccessMessage("餵奶記錄已添加")
+            })
+        }
+        
+        alertController.addAction(UIAlertAction(title: "取消", style: .cancel))
+        present(alertController, animated: true)
+    }
+    
+    private func showDiaperRecordDialog() {
+        let alertController = UIAlertController(title: "換尿布記錄", message: "選擇尿布類型", preferredStyle: .actionSheet)
+        
+        for diaperType in DiaperRecord.DiaperType.allCases {
+            alertController.addAction(UIAlertAction(title: diaperType.displayName, style: .default) { _ in
+                let record = DiaperRecord(diaperType: diaperType, wetness: .medium, hasBowelMovement: diaperType == .dirty || diaperType == .both)
+                self.dataManager.addRecord(record)
+                self.showSuccessMessage("換尿布記錄已添加")
+            })
+        }
+        
+        alertController.addAction(UIAlertAction(title: "取消", style: .cancel))
+        present(alertController, animated: true)
+    }
+    
+    private func showSleepRecordDialog() {
+        let alertController = UIAlertController(title: "睡眠記錄", message: "寶寶開始睡覺了嗎？", preferredStyle: .alert)
+        
+        alertController.addAction(UIAlertAction(title: "開始睡眠", style: .default) { _ in
+            let record = SleepRecord(startTime: Date(), quality: .good, location: .crib)
+            self.dataManager.addRecord(record)
+            self.showSuccessMessage("睡眠記錄已添加")
+        })
+        
+        alertController.addAction(UIAlertAction(title: "取消", style: .cancel))
+        present(alertController, animated: true)
+    }
+    
+    private func showGrowthRecordDialog() {
+        let alertController = UIAlertController(title: "成長記錄", message: "添加體重記錄", preferredStyle: .alert)
+        
+        alertController.addTextField { textField in
+            textField.placeholder = "體重（公斤）"
+            textField.keyboardType = .decimalPad
+        }
+        
+        alertController.addAction(UIAlertAction(title: "添加", style: .default) { _ in
+            if let textField = alertController.textFields?.first,
+               let weightText = textField.text,
+               let weight = Double(weightText) {
+                let record = GrowthRecord(weight: weight)
+                self.dataManager.addRecord(record)
+                self.showSuccessMessage("成長記錄已添加")
+            }
+        })
+        
+        alertController.addAction(UIAlertAction(title: "取消", style: .cancel))
+        present(alertController, animated: true)
+    }
+    
+    private func showSuccessMessage(_ message: String) {
+        let alertController = UIAlertController(title: "成功", message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "確定", style: .default))
+        present(alertController, animated: true)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
-extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == activityCollectionView {
-            return CGSize(width: 120, height: 120)
-        } else if collectionView == reminderCollectionView {
-            return CGSize(width: collectionView.bounds.width, height: 70)
-        }
-        return CGSize.zero
+// MARK: - UITableViewDataSource
+extension HomeViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return recentRecords.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RecordCell", for: indexPath) as! RecordTableViewCell
+        let record = recentRecords[indexPath.row]
+        cell.configure(with: record)
+        return cell
     }
 }
 
-// MARK: - ActivityCell
-class ActivityCell: UICollectionViewCell {
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = Constants.Colors.cardBackgroundColor
-        view.layer.cornerRadius = Constants.CornerRadius.medium
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = 4
-        view.layer.shadowOpacity = 0.1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+// MARK: - UITableViewDelegate
+extension HomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+}
+
+// MARK: - RecordTableViewCell
+class RecordTableViewCell: UITableViewCell {
     
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -431,106 +518,31 @@ class ActivityCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.body, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = Constants.Colors.primaryTextColor
-        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let timeLabel: UILabel = {
+    private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.caption)
+        label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = Constants.Colors.secondaryTextColor
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupViews() {
-        contentView.addSubview(containerView)
-        containerView.addSubview(iconImageView)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(timeLabel)
-        
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-            
-            iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constants.Spacing.medium),
-            iconImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 40),
-            iconImageView.heightAnchor.constraint(equalToConstant: 40),
-            
-            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: Constants.Spacing.small),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.Spacing.small),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.Spacing.small),
-            
-            timeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
-            timeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.Spacing.small),
-            timeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.Spacing.small),
-            timeLabel.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -Constants.Spacing.small)
-        ])
-    }
-    
-    func configure(title: String, iconName: String, time: String) {
-        titleLabel.text = title
-        iconImageView.image = UIImage(systemName: iconName)
-        timeLabel.text = time
-    }
-}
-
-// MARK: - ReminderCell
-class ReminderCell: UICollectionViewCell {
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = Constants.Colors.cardBackgroundColor
-        view.layer.cornerRadius = Constants.CornerRadius.medium
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = 4
-        view.layer.shadowOpacity = 0.1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = Constants.Colors.primaryColor
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.body, weight: .medium)
-        label.textColor = Constants.Colors.primaryTextColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let timeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.body, weight: .bold)
-        label.textColor = Constants.Colors.primaryColor
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = Constants.Colors.secondaryTextColor
+        label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
     }
     
@@ -539,33 +551,66 @@ class ReminderCell: UICollectionViewCell {
     }
     
     private func setupViews() {
-        contentView.addSubview(containerView)
-        containerView.addSubview(iconImageView)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(timeLabel)
+        contentView.addSubview(iconImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(subtitleLabel)
+        contentView.addSubview(timeLabel)
         
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            iconImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.heightAnchor.constraint(equalToConstant: 24),
             
-            iconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.Spacing.medium),
-            iconImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 30),
-            iconImageView.heightAnchor.constraint(equalToConstant: 30),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: timeLabel.leadingAnchor, constant: -8),
             
-            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: Constants.Spacing.medium),
-            titleLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            subtitleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 12),
+            subtitleLabel.trailingAnchor.constraint(equalTo: timeLabel.leadingAnchor, constant: -8),
+            subtitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
-            timeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.Spacing.medium),
-            timeLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+            timeLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            timeLabel.widthAnchor.constraint(equalToConstant: 80)
         ])
     }
     
-    func configure(title: String, time: String, iconName: String) {
-        titleLabel.text = title
-        timeLabel.text = time
-        iconImageView.image = UIImage(systemName: iconName)
+    func configure(with record: any BabyRecord) {
+        iconImageView.image = UIImage(systemName: record.type.iconName)
+        titleLabel.text = record.type.displayName
+        
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        timeLabel.text = formatter.string(from: record.timestamp)
+        
+        // 根据记录类型设置副标题
+        switch record {
+        case let feeding as FeedingRecord:
+            subtitleLabel.text = feeding.feedingType.displayName
+        case let diaper as DiaperRecord:
+            subtitleLabel.text = diaper.diaperType.displayName
+        case let sleep as SleepRecord:
+            if let duration = sleep.duration {
+                let hours = Int(duration) / 3600
+                let minutes = Int(duration) % 3600 / 60
+                subtitleLabel.text = "\(hours)小時\(minutes)分鐘"
+            } else {
+                subtitleLabel.text = "進行中"
+            }
+        case let growth as GrowthRecord:
+            if let weight = growth.weight {
+                subtitleLabel.text = "\(weight)公斤"
+            } else {
+                subtitleLabel.text = "成長記錄"
+            }
+        case let milestone as MilestoneRecord:
+            subtitleLabel.text = milestone.description
+        case let medication as MedicationRecord:
+            subtitleLabel.text = medication.medicationName
+        default:
+            subtitleLabel.text = ""
+        }
     }
 } 
