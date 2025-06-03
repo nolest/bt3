@@ -7,7 +7,7 @@ class NotificationsViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = Constants.Colors.backgroundColor
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.register(SwitchTableViewCell.self, forCellReuseIdentifier: "SwitchCell")
+        tableView.register(NotificationSwitchTableViewCell.self, forCellReuseIdentifier: "NotificationSwitchCell")
         return tableView
     }()
     
@@ -72,32 +72,28 @@ extension NotificationsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            // 主开关
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchTableViewCell
-            cell.configure(title: "啟用所有通知", description: "開啟或關閉所有通知")
+            // 主开关部分
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationSwitchCell", for: indexPath) as! NotificationSwitchTableViewCell
+            cell.configure(title: "推送通知", description: "允許應用發送通知")
             
-            // 获取保存的设置或使用默认值
+            // 获取当前设置
             let isEnabled = UserDefaults.standard.bool(forKey: "AllNotificationsEnabled")
             cell.switchControl.isOn = isEnabled
             
             cell.switchValueChanged = { [weak self] isOn in
-                // 保存设置
                 UserDefaults.standard.set(isOn, forKey: "AllNotificationsEnabled")
-                
-                // 更新其他设置的状态
                 self?.toggleAllNotifications(isOn: isOn)
             }
             
             return cell
         } else {
-            // 各类通知设置
+            // 具体通知项
             let sectionIndex = indexPath.section - 1
             let item = notificationSections[sectionIndex].items[indexPath.row]
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationSwitchCell", for: indexPath) as! NotificationSwitchTableViewCell
             cell.configure(title: item.title, description: item.description)
             
-            // 生成唯一的键
             let key = "Notification_\(sectionIndex)_\(indexPath.row)"
             
             // 获取保存的设置或使用默认值
@@ -230,8 +226,8 @@ extension NotificationsViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - SwitchTableViewCell
-class SwitchTableViewCell: UITableViewCell {
+// MARK: - NotificationSwitchTableViewCell
+class NotificationSwitchTableViewCell: UITableViewCell {
     
     var switchValueChanged: ((Bool) -> Void)?
     
