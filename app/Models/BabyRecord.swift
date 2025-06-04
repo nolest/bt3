@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: - 记录类型枚举
-enum RecordType: String, CaseIterable {
+enum RecordType: String, CaseIterable, Codable {
     case feeding = "feeding"
     case diaper = "diaper"
     case sleep = "sleep"
