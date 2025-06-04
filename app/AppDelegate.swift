@@ -6,80 +6,114 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         print("AppDelegate: didFinishLaunchingWithOptions called")
+        print("AppDelegate: Application state: \(application.applicationState.rawValue)")
+        print("AppDelegate: Launch options: \(launchOptions ?? [:])")
         
-        // 生成示例数据（如果需要） - 暂时禁用以测试
-        // print("AppDelegate: About to generate sample data")
-        // SampleDataGenerator.shared.generateSampleDataIfNeeded()
-        // print("AppDelegate: Sample data generation completed")
+        // 强制禁用Scene系统（如果存在）
+        if #available(iOS 13.0, *) {
+            print("AppDelegate: iOS 13+ detected, forcing traditional window mode")
+        }
         
-        // 强制使用传统方式创建window（绕过Scene系统）
-        print("AppDelegate: Setting up traditional window (forced)")
-        setupTraditionalWindow()
+        // 创建window
+        window = UIWindow(frame: UIScreen.main.bounds)
+        print("AppDelegate: Window created with frame: \(UIScreen.main.bounds)")
+        
+        // 创建一个简单的红色视图控制器
+        let viewController = SimpleRedViewController()
+        window?.rootViewController = viewController
+        print("AppDelegate: Root view controller set")
+        
+        // 设置window背景色作为备用
+        window?.backgroundColor = UIColor.blue
+        print("AppDelegate: Window background color set")
+        
+        // 显示window
+        window?.makeKeyAndVisible()
+        print("AppDelegate: Window made key and visible")
+        print("AppDelegate: Window isKeyWindow: \(window?.isKeyWindow ?? false)")
+        print("AppDelegate: Window isHidden: \(window?.isHidden ?? true)")
         
         return true
     }
     
-    private func setupTraditionalWindow() {
-        print("AppDelegate: Setting up traditional window")
-        window = UIWindow(frame: UIScreen.main.bounds)
-        
-        // 创建一个极其简单的测试视图控制器
-        let testViewController = TestViewController()
-        let navigationController = UINavigationController(rootViewController: testViewController)
-        
-        window?.rootViewController = navigationController
-        window?.makeKeyAndVisible()
-        print("AppDelegate: Traditional window setup completed")
-    }
-
-    // MARK: UISceneSession Lifecycle
+    // 强制返回nil来禁用Scene系统
     @available(iOS 13.0, *)
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        print("AppDelegate: configurationForConnecting called")
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration? {
+        print("AppDelegate: configurationForConnecting called - returning nil to disable scenes")
+        return nil
     }
-
-    @available(iOS 13.0, *)
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-        print("AppDelegate: didDiscardSceneSessions called")
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        print("AppDelegate: applicationDidBecomeActive called")
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        print("AppDelegate: applicationWillResignActive called")
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        print("AppDelegate: applicationDidEnterBackground called")
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        print("AppDelegate: applicationWillEnterForeground called")
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        print("AppDelegate: applicationWillTerminate called")
     }
 }
 
-// 在AppDelegate文件中定义一个简单的测试视图控制器
-class TestViewController: UIViewController {
+// 极其简单的红色视图控制器
+class SimpleRedViewController: UIViewController {
+    
+    override func loadView() {
+        print("SimpleRedViewController: loadView called")
+        super.loadView()
+        print("SimpleRedViewController: loadView completed")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("TestViewController: viewDidLoad called")
+        print("SimpleRedViewController: viewDidLoad called")
+        print("SimpleRedViewController: view bounds: \(view.bounds)")
         
-        view.backgroundColor = UIColor.red  // 使用红色背景便于识别
+        view.backgroundColor = UIColor.red
+        print("SimpleRedViewController: Background color set to red")
         
+        // 添加一个白色标签
         let label = UILabel()
-        label.text = "测试成功！"
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.text = "成功！"
         label.textColor = UIColor.white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
+        label.font = UIFont.systemFont(ofSize: 48, weight: .bold)
+        label.textAlignment = .center
+        label.frame = CGRect(x: 0, y: 200, width: view.bounds.width, height: 100)
         view.addSubview(label)
+        print("SimpleRedViewController: Label added")
         
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-        
-        print("TestViewController: Setup completed")
+        print("SimpleRedViewController: Setup completed")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("SimpleRedViewController: viewWillAppear called")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("TestViewController: viewDidAppear called")
+        print("SimpleRedViewController: viewDidAppear called")
+        print("SimpleRedViewController: Final view bounds: \(view.bounds)")
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        print("SimpleRedViewController: viewWillLayoutSubviews called")
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        print("SimpleRedViewController: viewDidLayoutSubviews called")
+        print("SimpleRedViewController: Layout view bounds: \(view.bounds)")
     }
 } 
