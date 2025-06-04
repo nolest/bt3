@@ -37,13 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    // 强制返回nil来禁用Scene系统
-    @available(iOS 13.0, *)
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration? {
-        print("AppDelegate: configurationForConnecting called - returning nil to disable scenes")
-        return nil
-    }
-    
     func applicationDidBecomeActive(_ application: UIApplication) {
         print("AppDelegate: applicationDidBecomeActive called")
     }
