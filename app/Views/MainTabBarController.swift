@@ -4,8 +4,10 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("MainTabBarController: viewDidLoad called")
         setupViewControllers()
         setupAppearance()
+        print("MainTabBarController: Setup completed")
     }
     
     private func setupViewControllers() {

@@ -49,8 +49,10 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("HomeViewController: viewDidLoad called")
         setupUI()
         loadData()
+        print("HomeViewController: Setup completed")
     }
     
     override func viewWillAppear(_ animated: Bool) {

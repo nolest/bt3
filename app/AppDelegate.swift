@@ -4,9 +4,12 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        print("AppDelegate: didFinishLaunchingWithOptions called")
         
-        // 生成示例数据（如果需要）
-        SampleDataGenerator.shared.generateSampleDataIfNeeded()
+        // 生成示例数据（如果需要） - 暂时禁用以测试
+        // print("AppDelegate: About to generate sample data")
+        // SampleDataGenerator.shared.generateSampleDataIfNeeded()
+        // print("AppDelegate: Sample data generation completed")
         
         return true
     }

@@ -2,81 +2,77 @@ import UIKit
 
 class SplashViewController: UIViewController {
     
-    private let logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        // 使用系统自带的婴儿图标
-        imageView.image = UIImage(systemName: "figure.and.child")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = UIColor.systemBlue
-        return imageView
-    }()
-    
-    private let appNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "智能寶寶生活記錄"
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textColor = UIColor.systemBlue
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        return label
-    }()
-    
-    private let activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.color = UIColor.systemBlue
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        print("SplashViewController: viewDidLoad called")
         
-        // 模拟加载过程，3秒后跳转到主界面
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+        // 设置简单的背景色
+        view.backgroundColor = UIColor.white
+        
+        // 创建一个简单的标签
+        let label = UILabel()
+        label.text = "智能寶寶生活記錄"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.textColor = UIColor.black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        print("SplashViewController: UI setup completed")
+        
+        // 2秒后跳转
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            print("SplashViewController: About to navigate to main screen")
             self.navigateToMainScreen()
         }
     }
     
-    private func setupUI() {
-        // 设置白色背景
-        view.backgroundColor = UIColor.systemBackground
+    private func navigateToMainScreen() {
+        print("SplashViewController: navigateToMainScreen called")
         
-        view.addSubview(logoImageView)
-        view.addSubview(appNameLabel)
-        view.addSubview(activityIndicator)
+        // 创建一个简单的主视图控制器
+        let mainViewController = SimpleMainViewController()
+        
+        // 使用navigationController进行跳转
+        if let navController = navigationController {
+            print("SplashViewController: Navigation controller found, setting view controllers")
+            navController.setViewControllers([mainViewController], animated: true)
+        } else {
+            print("SplashViewController: ERROR - Navigation controller not found!")
+        }
+    }
+}
+
+// 创建一个超级简单的主视图控制器用于测试
+class SimpleMainViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("SimpleMainViewController: viewDidLoad called")
+        
+        view.backgroundColor = UIColor.systemBackground
+        title = "主頁面"
+        
+        let label = UILabel()
+        label.text = "應用程序已成功啟動！"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.textColor = UIColor.label
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(label)
         
         NSLayoutConstraint.activate([
-            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50),
-            logoImageView.widthAnchor.constraint(equalToConstant: 120),
-            logoImageView.heightAnchor.constraint(equalToConstant: 120),
-            
-            appNameLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 16),
-            appNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            appNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            appNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            
-            activityIndicator.topAnchor.constraint(equalTo: appNameLabel.bottomAnchor, constant: 24),
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
-        activityIndicator.startAnimating()
-    }
-    
-    private func navigateToMainScreen() {
-        // 直接跳转到主界面，跳过登录
-        let mainTabBarController = MainTabBarController()
-        
-        // 使用window来设置根视图控制器
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            window.rootViewController = mainTabBarController
-            
-            // 添加过渡动画
-            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
-        }
+        print("SimpleMainViewController: Setup completed")
     }
 } 

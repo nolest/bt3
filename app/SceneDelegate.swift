@@ -4,15 +4,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
+        print("SceneDelegate: scene willConnectTo called")
+        guard let windowScene = (scene as? UIWindowScene) else { 
+            print("SceneDelegate: ERROR - Could not cast scene to UIWindowScene")
+            return 
+        }
         
+        print("SceneDelegate: Creating window and root view controller")
         let window = UIWindow(windowScene: windowScene)
         let rootViewController = SplashViewController()
         let navigationController = UINavigationController(rootViewController: rootViewController)
         
         window.rootViewController = navigationController
         self.window = window
+        print("SceneDelegate: Making window key and visible")
         window.makeKeyAndVisible()
+        print("SceneDelegate: Window setup completed")
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
