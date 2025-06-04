@@ -160,6 +160,31 @@ class DataManager {
         )
     }
     
+    func getDailyStats(for date: Date) -> DailyStats {
+        let calendar = Calendar.current
+        
+        // 获取指定日期的记录
+        let feedingRecordsForDate = feedingRecords.filter { calendar.isDate($0.timestamp, inSameDayAs: date) }
+        let diaperRecordsForDate = diaperRecords.filter { calendar.isDate($0.timestamp, inSameDayAs: date) }
+        let sleepDuration = calculateTotalSleepDuration(for: date)
+        
+        // 获取最后一次记录时间（仅限指定日期）
+        let allRecordsForDate = getRecords(from: calendar.startOfDay(for: date), to: calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: date))!)
+        
+        let lastFeedingTime = allRecordsForDate.first { $0.type == .feeding }?.timestamp
+        let lastDiaperTime = allRecordsForDate.first { $0.type == .diaper }?.timestamp
+        let lastSleepTime = allRecordsForDate.first { $0.type == .sleep }?.timestamp
+        
+        return DailyStats(
+            feedingCount: feedingRecordsForDate.count,
+            diaperCount: diaperRecordsForDate.count,
+            sleepDuration: sleepDuration,
+            lastFeedingTime: lastFeedingTime,
+            lastDiaperTime: lastDiaperTime,
+            lastSleepTime: lastSleepTime
+        )
+    }
+    
     private func calculateTotalSleepDuration(for date: Date) -> TimeInterval {
         let calendar = Calendar.current
         let sleepRecordsToday = sleepRecords.filter { calendar.isDate($0.timestamp, inSameDayAs: date) }
