@@ -14,15 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // SampleDataGenerator.shared.generateSampleDataIfNeeded()
         // print("AppDelegate: Sample data generation completed")
         
-        // 如果Scene系统失败，使用传统方式创建window
-        if #available(iOS 13.0, *) {
-            // iOS 13+ 使用Scene系统
-            print("AppDelegate: Using Scene-based lifecycle")
-        } else {
-            // iOS 12及以下使用传统方式
-            print("AppDelegate: Using traditional window setup")
-            setupTraditionalWindow()
-        }
+        // 强制使用传统方式创建window（绕过Scene系统）
+        print("AppDelegate: Setting up traditional window (forced)")
+        setupTraditionalWindow()
         
         return true
     }
