@@ -25,20 +25,12 @@ class MainTabBarController: UITabBarController {
         let photosVC = PhotosViewController()
         let photosNav = createNavController(for: photosVC, title: "相冊", image: UIImage(systemName: "photo")!, selectedImage: UIImage(systemName: "photo.fill")!)
         
-        // 社群页面
-        let communityVC = CommunityViewController()
-        let communityNav = createNavController(for: communityVC, title: "社群", image: UIImage(systemName: "person.3")!, selectedImage: UIImage(systemName: "person.3.fill")!)
-        
-        // 智慧助理页面
-        let assistantVC = AssistantViewController()
-        let assistantNav = createNavController(for: assistantVC, title: "助理", image: UIImage(systemName: "wand.and.stars")!, selectedImage: UIImage(systemName: "wand.and.stars.inverse")!)
-        
         // 設置頁面
         let settingsVC = SettingsViewController()
         let settingsNav = createNavController(for: settingsVC, title: "設置", image: UIImage(systemName: "gearshape")!, selectedImage: UIImage(systemName: "gearshape.fill")!)
         
-        // 设置视图控制器
-        viewControllers = [homeNav, recordsNav, statisticsNav, photosNav, communityNav, assistantNav, settingsNav]
+        // 设置视图控制器（减少标签页数量以简化）
+        viewControllers = [homeNav, recordsNav, statisticsNav, photosNav, settingsNav]
         selectedIndex = 0
     }
     
@@ -52,35 +44,35 @@ class MainTabBarController: UITabBarController {
     }
     
     private func setupAppearance() {
-        // 设置标签栏外观
-        tabBar.tintColor = Constants.Colors.primaryColor
-        tabBar.unselectedItemTintColor = Constants.Colors.secondaryTextColor
+        // 使用系统默认颜色
+        tabBar.tintColor = UIColor.systemBlue
+        tabBar.unselectedItemTintColor = UIColor.systemGray
         
         if #available(iOS 15.0, *) {
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = Constants.Colors.cardBackgroundColor
+            appearance.backgroundColor = UIColor.systemBackground
             tabBar.standardAppearance = appearance
             tabBar.scrollEdgeAppearance = appearance
         } else {
-            tabBar.barTintColor = Constants.Colors.cardBackgroundColor
+            tabBar.barTintColor = UIColor.systemBackground
         }
         
         // 设置导航栏外观
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = Constants.Colors.cardBackgroundColor
-            appearance.titleTextAttributes = [.foregroundColor: Constants.Colors.primaryTextColor]
+            appearance.backgroundColor = UIColor.systemBackground
+            appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
             
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
             UINavigationBar.appearance().compactAppearance = appearance
-            UINavigationBar.appearance().tintColor = Constants.Colors.primaryColor
+            UINavigationBar.appearance().tintColor = UIColor.systemBlue
         } else {
-            UINavigationBar.appearance().barTintColor = Constants.Colors.cardBackgroundColor
-            UINavigationBar.appearance().tintColor = Constants.Colors.primaryColor
-            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: Constants.Colors.primaryTextColor]
+            UINavigationBar.appearance().barTintColor = UIColor.systemBackground
+            UINavigationBar.appearance().tintColor = UIColor.systemBlue
+            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.label]
         }
     }
 } 
