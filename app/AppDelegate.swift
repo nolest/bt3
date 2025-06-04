@@ -24,8 +24,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setupTraditionalWindow() {
         print("AppDelegate: Setting up traditional window")
         window = UIWindow(frame: UIScreen.main.bounds)
-        let rootViewController = SplashViewController()
-        let navigationController = UINavigationController(rootViewController: rootViewController)
+        
+        // 创建一个极其简单的测试视图控制器
+        let testViewController = TestViewController()
+        let navigationController = UINavigationController(rootViewController: testViewController)
+        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         print("AppDelegate: Traditional window setup completed")
@@ -46,5 +49,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
         print("AppDelegate: didDiscardSceneSessions called")
+    }
+}
+
+// 在AppDelegate文件中定义一个简单的测试视图控制器
+class TestViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("TestViewController: viewDidLoad called")
+        
+        view.backgroundColor = UIColor.red  // 使用红色背景便于识别
+        
+        let label = UILabel()
+        label.text = "测试成功！"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.textColor = UIColor.white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        print("TestViewController: Setup completed")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("TestViewController: viewDidAppear called")
     }
 } 
