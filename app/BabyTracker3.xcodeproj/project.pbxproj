@@ -90,7 +90,7 @@
 				B1000000000000000000024 /* LaunchScreen.storyboard */,
 				B1000000000000000000023 /* Info.plist */,
 			);
-			path = BabyTracker3;
+			name = BabyTracker3;
 			sourceTree = "<group>";
 		};
 		D1000000000000000000002 /* Products */ = {
