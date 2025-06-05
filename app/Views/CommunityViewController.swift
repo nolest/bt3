@@ -1,5 +1,7 @@
 import UIKit
 
+// 移除有问题的扩展
+
 class CommunityViewController: UIViewController {
     
     private let scrollView: UIScrollView = {
