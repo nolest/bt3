@@ -37,7 +37,7 @@ class AssistantViewController: UIViewController {
     private let welcomeLabel: UILabel = {
         let label = UILabel()
         label.text = "您好，我是您的智慧育兒助理"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.title, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: Constants.FontSize.title2, weight: .bold)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -56,7 +56,7 @@ class AssistantViewController: UIViewController {
     private let recentQuestionsLabel: UILabel = {
         let label = UILabel()
         label.text = "常見問題"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.subtitle, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: Constants.FontSize.headline, weight: .bold)
         label.textColor = Constants.Colors.primaryTextColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -73,7 +73,7 @@ class AssistantViewController: UIViewController {
     private let aiAnalysisLabel: UILabel = {
         let label = UILabel()
         label.text = "智能分析"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.subtitle, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: Constants.FontSize.headline, weight: .bold)
         label.textColor = Constants.Colors.primaryTextColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
