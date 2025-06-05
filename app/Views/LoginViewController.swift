@@ -3,276 +3,285 @@ import AuthenticationServices
 
 class LoginViewController: UIViewController {
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsVerticalScrollIndicator = false
-        return scrollView
-    }()
+    // MARK: - UI Elements
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     
-    private let contentView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let headerImageView: UIImageView = {
+    private let logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .systemBlue
+        // 使用系统图标作为临时logo
+        imageView.image = UIImage(systemName: "heart.circle.fill")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.clipsToBounds = true
-        // 使用系统图标替代，实际项目中需要替换为真实的父母与孩子的图片
-        imageView.image = UIImage(systemName: "figure.and.child")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = Constants.Colors.primaryColor
-        imageView.backgroundColor = Constants.Colors.primaryLightColor.withAlphaComponent(0.2)
         return imageView
     }()
     
-    private let welcomeLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "歡迎使用\n智能寶寶生活記錄"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.largeTitle, weight: .bold)
-        label.textColor = Constants.Colors.primaryTextColor
-        label.numberOfLines = 2
+        label.text = "智能寶寶生活記錄"
+        label.font = .boldSystemFont(ofSize: 32)
         label.textAlignment = .center
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let descriptionLabel: UILabel = {
+    private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "全方位的育兒助手，讓照顧寶寶變得輕鬆簡單\n\n使用Apple ID安全快速登入"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.body)
-        label.textColor = Constants.Colors.secondaryTextColor
+        label.text = "記錄寶寶每個珍貴時刻\n用AI智慧分析成長軌跡"
+        label.font = .systemFont(ofSize: 18, weight: .medium)
+        label.textAlignment = .center
+        label.textColor = .secondaryLabel
         label.numberOfLines = 0
-        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let appleSignInButton: ASAuthorizationAppleIDButton = {
-        let button = ASAuthorizationAppleIDButton(type: .signIn, style: .black)
+    private let featuresStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 16
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private let signInButton: ASAuthorizationAppleIDButton = {
+        let button = ASAuthorizationAppleIDButton(authorizationButtonType: .signIn, authorizationButtonStyle: .black)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.cornerRadius = Constants.CornerRadius.medium
+        button.layer.cornerRadius = 8
         return button
     }()
     
     private let privacyLabel: UILabel = {
         let label = UILabel()
-        label.text = "使用Apple登入，您的隐私受到最高级别保护\n我們不會收集或分享您的個人信息"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.caption)
-        label.textColor = Constants.Colors.secondaryTextColor
+        label.text = "我們重視您的隱私\n使用Apple登入安全便捷"
+        label.font = .systemFont(ofSize: 14)
         label.textAlignment = .center
+        label.textColor = .tertiaryLabel
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("LoginViewController: viewDidLoad called")
         setupUI()
+        setupConstraints()
         setupActions()
-        print("LoginViewController: viewDidLoad completed")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("LoginViewController: viewDidAppear called")
-        checkExistingAppleIDCredential()
-    }
-    
+    // MARK: - Setup Methods
     private func setupUI() {
-        navigationController?.isNavigationBarHidden = true
-        view.backgroundColor = Constants.Colors.backgroundColor
+        view.backgroundColor = .systemBackground
         
         // 添加滚动视图
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        // 添加内容
-        contentView.addSubview(headerImageView)
-        contentView.addSubview(welcomeLabel)
-        contentView.addSubview(descriptionLabel)
-        contentView.addSubview(appleSignInButton)
+        // 添加所有UI元素到contentView
+        contentView.addSubview(logoImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(subtitleLabel)
+        contentView.addSubview(featuresStackView)
+        contentView.addSubview(signInButton)
         contentView.addSubview(privacyLabel)
-        contentView.addSubview(activityIndicator)
         
-        // 设置约束
+        // 创建功能特色列表
+        createFeatureItems()
+    }
+    
+    private func createFeatureItems() {
+        let features = [
+            ("camera.fill", "智慧影像分析", "AI識別寶寶情緒與發展狀況"),
+            ("chart.line.uptrend.xyaxis", "成長追蹤", "記錄身高體重等重要指標"),
+            ("heart.text.square.fill", "健康提醒", "疫苗接種與健康檢查提醒"),
+            ("photo.on.rectangle.angled", "珍貴回憶", "自動整理寶寶照片與視頻")
+        ]
+        
+        for (iconName, title, description) in features {
+            let featureView = createFeatureView(icon: iconName, title: title, description: description)
+            featuresStackView.addArrangedSubview(featureView)
+        }
+    }
+    
+    private func createFeatureView(icon: String, title: String, description: String) -> UIView {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let iconImageView = UIImageView(image: UIImage(systemName: icon))
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.tintColor = .systemBlue
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = .boldSystemFont(ofSize: 16)
+        titleLabel.textColor = .label
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let descriptionLabel = UILabel()
+        descriptionLabel.text = description
+        descriptionLabel.font = .systemFont(ofSize: 14)
+        descriptionLabel.textColor = .secondaryLabel
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        containerView.addSubview(iconImageView)
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(descriptionLabel)
+        
         NSLayoutConstraint.activate([
-            // 滚动视图约束
+            iconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.heightAnchor.constraint(equalToConstant: 24),
+            
+            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 12),
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            
+            descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        
+        return containerView
+    }
+    
+    private func setupConstraints() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            // ScrollView constraints
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // 内容视图约束
+            // ContentView constraints
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            // 头部图像约束
-            headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.Spacing.extraLarge),
-            headerImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            headerImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            headerImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25),
+            // Logo constraints
+            logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60),
+            logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            logoImageView.widthAnchor.constraint(equalToConstant: 80),
+            logoImageView.heightAnchor.constraint(equalToConstant: 80),
             
-            // 欢迎标签约束
-            welcomeLabel.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: Constants.Spacing.extraLarge),
-            welcomeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            welcomeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
+            // Title constraints
+            titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 24),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
-            // 描述标签约束
-            descriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: Constants.Spacing.large),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
+            // Subtitle constraints
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
+            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            subtitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
-            // Apple登录按钮约束
-            appleSignInButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constants.Spacing.extraExtraLarge),
-            appleSignInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            appleSignInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
-            appleSignInButton.heightAnchor.constraint(equalToConstant: 50),
+            // Features constraints
+            featuresStackView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 40),
+            featuresStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            featuresStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
-            // 隐私标签约束
-            privacyLabel.topAnchor.constraint(equalTo: appleSignInButton.bottomAnchor, constant: Constants.Spacing.large),
-            privacyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            privacyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
-            privacyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.Spacing.extraLarge),
+            // Sign in button constraints
+            signInButton.topAnchor.constraint(equalTo: featuresStackView.bottomAnchor, constant: 40),
+            signInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            signInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            signInButton.heightAnchor.constraint(equalToConstant: 50),
             
-            // 活动指示器约束
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            // Privacy label constraints
+            privacyLabel.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 16),
+            privacyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            privacyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            privacyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40)
         ])
     }
     
     private func setupActions() {
-        appleSignInButton.addTarget(self, action: #selector(appleSignInButtonTapped), for: .touchUpInside)
+        signInButton.addTarget(self, action: #selector(handleSignInWithApple), for: .touchUpInside)
     }
     
-    // MARK: - Apple Sign In
-    @objc private func appleSignInButtonTapped() {
-        performAppleSignIn()
-    }
-    
-    private func performAppleSignIn() {
+    // MARK: - Actions
+    @objc private func handleSignInWithApple() {
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.fullName, .email]
         
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = self
-        controller.presentationContextProvider = self
-        
-        // 显示加载指示器
-        showLoadingIndicator()
-        
-        controller.performRequests()
-    }
-    
-    private func checkExistingAppleIDCredential() {
-        let request = ASAuthorizationAppleIDProvider().createRequest()
-        request.requestedScopes = [.fullName, .email]
-        
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = self
-        controller.presentationContextProvider = self
-        
-        // 检查现有凭据，但不显示加载指示器
-        // controller.performRequests()
-    }
-    
-    private func showLoadingIndicator() {
-        activityIndicator.startAnimating()
-        appleSignInButton.isEnabled = false
-    }
-    
-    private func hideLoadingIndicator() {
-        activityIndicator.stopAnimating()
-        appleSignInButton.isEnabled = true
-    }
-    
-    private func handleSuccessfulSignIn(userID: String, email: String?, fullName: PersonNameComponents?) {
-        // 存储用户信息
-        UserDefaults.standard.set(userID, forKey: "appleUserID")
-        UserDefaults.standard.set(email, forKey: "userEmail")
-        
-        if let fullName = fullName {
-            let displayName = PersonNameComponentsFormatter().string(from: fullName)
-            UserDefaults.standard.set(displayName, forKey: "userDisplayName")
-        }
-        
-        UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
-        
-        // 跳转到主页
-        DispatchQueue.main.async {
-            let homeVC = MainTabBarController()
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.first {
-                window.rootViewController = homeVC
-                window.makeKeyAndVisible()
-            }
-        }
-    }
-    
-    private func showError(message: String) {
-        let alert = UIAlertController(title: "登入失敗", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "確定", style: .default))
-        present(alert, animated: true)
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
     }
 }
 
 // MARK: - ASAuthorizationControllerDelegate
 extension LoginViewController: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        hideLoadingIndicator()
-        
-        switch authorization.credential {
-        case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            let userID = appleIDCredential.user
-            let email = appleIDCredential.email
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            // 获取用户信息
+            let userIdentifier = appleIDCredential.user
             let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
             
-            print("Apple Sign In 成功")
-            print("User ID: \(userID)")
-            print("Email: \(email ?? "未提供")")
-            print("Full Name: \(fullName?.debugDescription ?? "未提供")")
+            print("✅ Apple登录成功")
+            print("User ID: \(userIdentifier)")
+            print("Full Name: \(fullName?.formatted() ?? "N/A")")
+            print("Email: \(email ?? "N/A")")
             
-            handleSuccessfulSignIn(userID: userID, email: email, fullName: fullName)
+            // 保存用户信息
+            UserDefaults.standard.set(userIdentifier, forKey: "appleUserID")
+            UserDefaults.standard.set(true, forKey: "isLoggedIn")
             
-        default:
-            showError(message: "未知的認證類型")
+            // 切换到主界面
+            DispatchQueue.main.async {
+                self.navigateToMainApp()
+            }
         }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        hideLoadingIndicator()
+        print("❌ Apple登录失败: \(error.localizedDescription)")
         
-        guard let authError = error as? ASAuthorizationError else {
-            showError(message: "認證過程中發生未知錯誤")
-            return
+        // 显示错误提示
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "登录失败", message: "请重试或检查网络连接", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "确定", style: .default))
+            self.present(alert, animated: true)
         }
+    }
+    
+    private func navigateToMainApp() {
+        print("🏠 切换到主界面")
         
-        switch authError.code {
-        case .canceled:
-            print("用戶取消了Apple Sign In")
-        case .failed:
-            showError(message: "認證失敗，請重試")
-        case .invalidResponse:
-            showError(message: "認證響應無效")
-        case .notHandled:
-            showError(message: "認證請求未被處理")
-        case .unknown:
-            showError(message: "發生未知錯誤")
-        @unknown default:
-            showError(message: "發生未知錯誤")
+        // 创建主界面（临时使用简单界面）
+        let mainVC = UIViewController()
+        mainVC.view.backgroundColor = .systemGreen
+        
+        let welcomeLabel = UILabel()
+        welcomeLabel.text = "🎉 登录成功！\n欢迎使用智能寶寶生活記錄"
+        welcomeLabel.textColor = .white
+        welcomeLabel.textAlignment = .center
+        welcomeLabel.numberOfLines = 0
+        welcomeLabel.font = .boldSystemFont(ofSize: 24)
+        welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        mainVC.view.addSubview(welcomeLabel)
+        NSLayoutConstraint.activate([
+            welcomeLabel.centerXAnchor.constraint(equalTo: mainVC.view.centerXAnchor),
+            welcomeLabel.centerYAnchor.constraint(equalTo: mainVC.view.centerYAnchor)
+        ])
+        
+        // 切换根视图控制器
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.rootViewController = mainVC
+            window.makeKeyAndVisible()
         }
     }
 }
