@@ -10,6 +10,12 @@ class MainTabBarController: UITabBarController {
         print("MainTabBarController: Setup completed")
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("MainTabBarController: viewDidAppear called")
+        print("MainTabBarController: viewControllers count: \(viewControllers?.count ?? 0)")
+    }
+    
     private func setupViewControllers() {
         // 首页（今日概览）
         let homeVC = HomeViewController()

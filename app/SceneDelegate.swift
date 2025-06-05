@@ -14,23 +14,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         print("SceneDelegate: Creating window with windowScene")
         window = UIWindow(windowScene: windowScene)
         
+        // 临时使用简单的测试视图控制器
+        print("SceneDelegate: Creating simple test view controller")
+        let testViewController = SimpleTestViewController()
+        window?.rootViewController = testViewController
+        print("SceneDelegate: SimpleTestViewController set as rootViewController")
+        
         // 检查用户登录状态
         let isUserLoggedIn = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
+        print("SceneDelegate: isUserLoggedIn = \(isUserLoggedIn)")
         
+        /*
         if isUserLoggedIn {
             print("SceneDelegate: User is logged in, showing main interface")
             // 用户已登录，显示主界面
             let mainTabBarController = MainTabBarController()
             window?.rootViewController = mainTabBarController
+            print("SceneDelegate: MainTabBarController set as rootViewController")
         } else {
             print("SceneDelegate: User not logged in, showing login interface")
             // 用户未登录，显示登录界面
             let loginViewController = LoginViewController()
             let navigationController = UINavigationController(rootViewController: loginViewController)
             window?.rootViewController = navigationController
+            print("SceneDelegate: LoginViewController set as rootViewController")
         }
+        */
         
+        print("SceneDelegate: About to call makeKeyAndVisible")
         window?.makeKeyAndVisible()
+        print("SceneDelegate: makeKeyAndVisible called")
+        
+        // 额外的调试信息
+        print("SceneDelegate: Window frame: \(window?.frame ?? CGRect.zero)")
+        print("SceneDelegate: Window isHidden: \(window?.isHidden ?? true)")
+        print("SceneDelegate: RootViewController: \(window?.rootViewController?.description ?? "nil")")
+        
         print("SceneDelegate: Window setup completed")
     }
 
@@ -88,5 +107,40 @@ class ModernTestViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("ModernTestViewController: viewDidAppear called")
+    }
+}
+
+// 简单测试视图控制器
+class SimpleTestViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("SimpleTestViewController: viewDidLoad called")
+        
+        view.backgroundColor = UIColor.systemRed
+        
+        let label = UILabel()
+        label.text = "简单测试视图\n如果您看到这个，说明Scene系统工作正常"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textColor = UIColor.white
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            label.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20)
+        ])
+        
+        print("SimpleTestViewController: UI setup completed")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("SimpleTestViewController: viewDidAppear called")
     }
 } 

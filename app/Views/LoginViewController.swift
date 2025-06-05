@@ -77,12 +77,15 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("LoginViewController: viewDidLoad called")
         setupUI()
         setupActions()
+        print("LoginViewController: viewDidLoad completed")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("LoginViewController: viewDidAppear called")
         checkExistingAppleIDCredential()
     }
     
