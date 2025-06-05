@@ -164,6 +164,18 @@ class PhotosViewController: UIViewController {
         return collectionView
     }()
     
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "還沒有照片，開始記錄寶寶的珍貴時刻吧！"
+        label.font = UIFont.systemFont(ofSize: Constants.FontSize.body)
+        label.textColor = Constants.Colors.secondaryTextColor
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private var mediaItems: [MediaItem] = []
     private let imagePicker = UIImagePickerController()
     
@@ -222,6 +234,7 @@ class PhotosViewController: UIViewController {
         
         // Collection View
         contentView.addSubview(mediaCollectionView)
+        contentView.addSubview(messageLabel)
         
         // Constraints
         NSLayoutConstraint.activate([
@@ -264,12 +277,235 @@ class PhotosViewController: UIViewController {
             
             quotaLabel.topAnchor.constraint(equalTo: statsStack.bottomAnchor, constant: Constants.Spacing.small),
             quotaLabel.centerXAnchor.constraint(equalTo: statsCardView.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            // Action Buttons
+            actionButtonsStackView.topAnchor.constraint(equalTo: statsCardView.bottomAnchor, constant: Constants.Spacing.large),
+            actionButtonsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
+            actionButtonsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
+            actionButtonsStackView.heightAnchor.constraint(equalToConstant: 44),
+            
+            // Collection View
+            mediaCollectionView.topAnchor.constraint(equalTo: actionButtonsStackView.bottomAnchor, constant: Constants.Spacing.large),
+            mediaCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            mediaCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            mediaCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            mediaCollectionView.heightAnchor.constraint(equalToConstant: 400),
+            
+            // Message Label
+            messageLabel.centerXAnchor.constraint(equalTo: mediaCollectionView.centerXAnchor),
+            messageLabel.centerYAnchor.constraint(equalTo: mediaCollectionView.centerYAnchor),
+            messageLabel.leadingAnchor.constraint(greaterThanOrEqualTo: mediaCollectionView.leadingAnchor, constant: Constants.Spacing.large),
+            messageLabel.trailingAnchor.constraint(lessThanOrEqualTo: mediaCollectionView.trailingAnchor, constant: -Constants.Spacing.large)
         ])
+    }
+    
+    private func setupCollectionView() {
+        mediaCollectionView.delegate = self
+        mediaCollectionView.dataSource = self
+        mediaCollectionView.register(MediaItemCell.self, forCellWithReuseIdentifier: "MediaItemCell")
+        
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+    }
+    
+    private func setupActions() {
+        takePhotoButton.addTarget(self, action: #selector(takePhotoTapped), for: .touchUpInside)
+        selectPhotoButton.addTarget(self, action: #selector(selectPhotoTapped), for: .touchUpInside)
+        generateReportButton.addTarget(self, action: #selector(generateReportTapped), for: .touchUpInside)
+    }
+    
+    private func loadMediaItems() {
+        mediaItems = mediaManager.getAllMediaItems()
+        updateUI()
+    }
+    
+    private func refreshData() {
+        loadMediaItems()
+        updateQuotaDisplay()
+    }
+    
+    private func updateQuotaDisplay() {
+        let quotaStatus = gaiAnalysisService.getQuotaStatus()
+        quotaLabel.text = "今日配額：\(quotaStatus.dailyRemaining)/\(quotaStatus.dailyLimit)"
+        
+        if !quotaStatus.canAnalyze {
+            quotaLabel.textColor = Constants.Colors.errorColor
+        } else {
+            quotaLabel.textColor = Constants.Colors.secondaryTextColor
+        }
+    }
+    
+    private func updateUI() {
+        DispatchQueue.main.async {
+            let statistics = self.mediaManager.getMediaStatistics()
+            
+            self.totalItemsLabel.text = "\(statistics.totalItems)"
+            self.analyzedItemsLabel.text = "\(statistics.analyzedCount)"
+            
+            self.messageLabel.isHidden = !self.mediaItems.isEmpty
+            self.mediaCollectionView.reloadData()
+        }
+    }
+    
+    // MARK: - Actions
+    @objc private func takePhotoTapped() {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            showAlert(title: "相機不可用", message: "您的設備不支持相機功能")
+            return
+        }
+        
+        imagePicker.sourceType = .camera
+        present(imagePicker, animated: true)
+    }
+    
+    @objc private func selectPhotoTapped() {
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true)
+    }
+    
+    @objc private func generateReportTapped() {
+        let analyzedItems = mediaItems.filter { $0.analysisStatus == .completed }
+        
+        guard !analyzedItems.isEmpty else {
+            showAlert(title: "無法生成報告", message: "請先對照片進行AI分析")
+            return
+        }
+        
+        let now = Date()
+        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
+        let period = DateInterval(start: weekAgo, end: now)
+        
+        let report = gaiAnalysisService.generateReport(for: analyzedItems, period: period)
+        
+        let reportVC = GAIReportViewController(report: report)
+        let navController = UINavigationController(rootViewController: reportVC)
+        present(navController, animated: true)
+    }
+    
+    private func analyzeMediaItem(_ mediaItem: MediaItem) {
+        guard let index = mediaItems.firstIndex(where: { $0.id == mediaItem.id }) else { return }
+        
+        // 更新狀態為處理中
+        mediaItems[index].analysisStatus = .processing
+        mediaManager.updateMediaItem(mediaItems[index])
+        
+        DispatchQueue.main.async {
+            self.mediaCollectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+        }
+        
+        // 開始分析
+        gaiAnalysisService.analyzeMedia(mediaItem) { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let analysisResult):
+                    self.mediaItems[index].analysisStatus = .completed
+                    self.mediaItems[index].analysisResult = analysisResult
+                    self.mediaManager.updateMediaItem(self.mediaItems[index])
+                    
+                    self.updateUI()
+                    self.updateQuotaDisplay()
+                    
+                    self.showAlert(title: "分析完成", message: "AI分析已完成，點擊查看結果！")
+                    
+                case .failure(let error):
+                    self.mediaItems[index].analysisStatus = .failed
+                    self.mediaManager.updateMediaItem(self.mediaItems[index])
+                    
+                    self.mediaCollectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+                    
+                    self.showAlert(title: "分析失敗", message: error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    private func showAnalysisResult(for mediaItem: MediaItem) {
+        guard let result = mediaItem.analysisResult else { return }
+        
+        let resultVC = GAIAnalysisResultViewController(mediaItem: mediaItem, analysisResult: result)
+        let navController = UINavigationController(rootViewController: resultVC)
+        present(navController, animated: true)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "確定", style: .default))
+        present(alert, animated: true)
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension PhotosViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return mediaItems.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MediaItemCell", for: indexPath) as! MediaItemCell
+        let mediaItem = mediaItems[indexPath.item]
+        
+        cell.configure(with: mediaItem)
+        
+        cell.onAnalyzeTapped = { [weak self] in
+            let item = self?.mediaItems[indexPath.item]
+            
+            switch item?.analysisStatus {
+            case .pending, .failed:
+                self?.analyzeMediaItem(item!)
+            case .completed:
+                self?.showAnalysisResult(for: item!)
+            default:
+                break
+            }
+        }
+        
+        cell.onFavoriteTapped = { [weak self] in
+            self?.updateUI()
+        }
+        
+        return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension PhotosViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let mediaItem = mediaItems[indexPath.item]
+        let detailVC = MediaDetailViewController(mediaItem: mediaItem)
+        let navController = UINavigationController(rootViewController: detailVC)
+        present(navController, animated: true)
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+extension PhotosViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+        
+        guard let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage else {
+            showAlert(title: "錯誤", message: "無法獲取選中的圖片")
+            return
+        }
+        
+        mediaManager.saveImage(image) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    self?.refreshData()
+                    self?.showAlert(title: "保存成功", message: "照片已保存到智能相冊")
+                    
+                case .failure(let error):
+                    self?.showAlert(title: "保存失敗", message: error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
 } 
