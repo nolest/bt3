@@ -263,17 +263,17 @@ struct GAIAnalysisResult: Codable {
     
     // 計算整體發展評分
     var overallDevelopmentScore: Double {
-        let motorAverage = (motorDevelopment.grossMotor.score + 
-                           motorDevelopment.fineMotor.score + 
-                           motorDevelopment.coordination.score + 
-                           motorDevelopment.balance.score) / 4.0
+        let motorAverage = (Double(motorDevelopment.grossMotor.score) + 
+                           Double(motorDevelopment.fineMotor.score) + 
+                           Double(motorDevelopment.coordination.score) + 
+                           Double(motorDevelopment.balance.score)) / 4.0
         
-        let cognitiveAverage = (cognitiveDevelopment.attention.score + 
-                               cognitiveDevelopment.socialInteraction.score + 
-                               cognitiveDevelopment.languageReadiness.score + 
-                               cognitiveDevelopment.problemSolving.score) / 4.0
+        let cognitiveAverage = (Double(cognitiveDevelopment.attention.score) + 
+                               Double(cognitiveDevelopment.socialInteraction.score) + 
+                               Double(cognitiveDevelopment.languageReadiness.score) + 
+                               Double(cognitiveDevelopment.problemSolving.score)) / 4.0
         
-        return (Double(motorAverage) + Double(cognitiveAverage)) / 2.0 * 25.0 // 轉換為0-100分制
+        return (motorAverage + cognitiveAverage) / 2.0 * 25.0 // 轉換為0-100分制
     }
 }
 
