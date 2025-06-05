@@ -1,4 +1,5 @@
 import UIKit
+import AuthenticationServices
 
 class LoginViewController: UIViewController {
     
@@ -6,7 +7,6 @@ class LoginViewController: UIViewController {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = false
-        scrollView.keyboardDismissMode = .interactive
         return scrollView
     }()
     
@@ -34,111 +34,56 @@ class LoginViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: Constants.FontSize.largeTitle, weight: .bold)
         label.textColor = Constants.Colors.primaryTextColor
         label.numberOfLines = 2
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "全方位的育兒助手，讓照顧寶寶變得輕鬆簡單"
+        label.text = "全方位的育兒助手，讓照顧寶寶變得輕鬆簡單\n\n使用Apple ID安全快速登入"
         label.font = UIFont.systemFont(ofSize: Constants.FontSize.body)
         label.textColor = Constants.Colors.secondaryTextColor
         label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let emailTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "電子郵件"
-        textField.borderStyle = .roundedRect
-        textField.keyboardType = .emailAddress
-        textField.autocapitalizationType = .none
-        textField.autocorrectionType = .no
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = Constants.Colors.cardBackgroundColor
-        return textField
-    }()
-    
-    private let passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "密碼"
-        textField.borderStyle = .roundedRect
-        textField.isSecureTextEntry = true
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = Constants.Colors.cardBackgroundColor
-        return textField
-    }()
-    
-    private let loginButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("登入", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Constants.Colors.primaryColor
-        button.layer.cornerRadius = Constants.CornerRadius.medium
-        button.titleLabel?.font = UIFont.systemFont(ofSize: Constants.FontSize.body, weight: .semibold)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    private let signupButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("新用戶註冊", for: .normal)
-        button.setTitleColor(Constants.Colors.primaryColor, for: .normal)
-        button.backgroundColor = .clear
-        button.titleLabel?.font = UIFont.systemFont(ofSize: Constants.FontSize.body)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    private let socialLoginLabel: UILabel = {
-        let label = UILabel()
-        label.text = "或使用社交賬號登入"
-        label.font = UIFont.systemFont(ofSize: Constants.FontSize.caption)
-        label.textColor = Constants.Colors.secondaryTextColor
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let socialButtonsStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = Constants.Spacing.medium
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    
-    private let facebookButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "f.circle.fill")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = UIColor(hex: "#3b5998")
+    private let appleSignInButton: ASAuthorizationAppleIDButton = {
+        let button = ASAuthorizationAppleIDButton(type: .signIn, style: .black)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.cornerRadius = Constants.CornerRadius.medium
         return button
     }()
     
-    private let googleButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "g.circle.fill")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = UIColor(hex: "#db4437")
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private let privacyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "使用Apple登入，您的隐私受到最高级别保护\n我們不會收集或分享您的個人信息"
+        label.font = UIFont.systemFont(ofSize: Constants.FontSize.caption)
+        label.textColor = Constants.Colors.secondaryTextColor
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
-    private let appleButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "apple.logo")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = .black
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        setupKeyboardHandling()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkExistingAppleIDCredential()
     }
     
     private func setupUI() {
@@ -153,17 +98,9 @@ class LoginViewController: UIViewController {
         contentView.addSubview(headerImageView)
         contentView.addSubview(welcomeLabel)
         contentView.addSubview(descriptionLabel)
-        contentView.addSubview(emailTextField)
-        contentView.addSubview(passwordTextField)
-        contentView.addSubview(loginButton)
-        contentView.addSubview(signupButton)
-        contentView.addSubview(socialLoginLabel)
-        contentView.addSubview(socialButtonsStackView)
-        
-        // 添加社交按钮
-        socialButtonsStackView.addArrangedSubview(facebookButton)
-        socialButtonsStackView.addArrangedSubview(googleButton)
-        socialButtonsStackView.addArrangedSubview(appleButton)
+        contentView.addSubview(appleSignInButton)
+        contentView.addSubview(privacyLabel)
+        contentView.addSubview(activityIndicator)
         
         // 设置约束
         NSLayoutConstraint.activate([
@@ -181,142 +118,165 @@ class LoginViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
             // 头部图像约束
-            headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.Spacing.extraLarge),
             headerImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             headerImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            headerImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
+            headerImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25),
             
             // 欢迎标签约束
-            welcomeLabel.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: Constants.Spacing.large),
+            welcomeLabel.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: Constants.Spacing.extraLarge),
             welcomeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
             welcomeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
             
             // 描述标签约束
-            descriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: Constants.Spacing.small),
+            descriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: Constants.Spacing.large),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
             
-            // 邮箱输入框约束
-            emailTextField.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constants.Spacing.extraLarge),
-            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
-            emailTextField.heightAnchor.constraint(equalToConstant: 50),
+            // Apple登录按钮约束
+            appleSignInButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Constants.Spacing.extraExtraLarge),
+            appleSignInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
+            appleSignInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
+            appleSignInButton.heightAnchor.constraint(equalToConstant: 50),
             
-            // 密码输入框约束
-            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: Constants.Spacing.medium),
-            passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
-            passwordTextField.heightAnchor.constraint(equalToConstant: 50),
+            // 隐私标签约束
+            privacyLabel.topAnchor.constraint(equalTo: appleSignInButton.bottomAnchor, constant: Constants.Spacing.large),
+            privacyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
+            privacyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
+            privacyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.Spacing.extraLarge),
             
-            // 登录按钮约束
-            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: Constants.Spacing.large),
-            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
-            loginButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            // 注册按钮约束
-            signupButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: Constants.Spacing.medium),
-            signupButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            // 社交登录标签约束
-            socialLoginLabel.topAnchor.constraint(equalTo: signupButton.bottomAnchor, constant: Constants.Spacing.large),
-            socialLoginLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Spacing.large),
-            socialLoginLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Spacing.large),
-            
-            // 社交按钮栈视图约束
-            socialButtonsStackView.topAnchor.constraint(equalTo: socialLoginLabel.bottomAnchor, constant: Constants.Spacing.medium),
-            socialButtonsStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            socialButtonsStackView.widthAnchor.constraint(equalToConstant: 200),
-            socialButtonsStackView.heightAnchor.constraint(equalToConstant: 50),
-            socialButtonsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.Spacing.extraLarge)
+            // 活动指示器约束
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
-        
-        // 设置社交按钮的大小
-        [facebookButton, googleButton, appleButton].forEach { button in
-            button.imageView?.contentMode = .scaleAspectFit
-            NSLayoutConstraint.activate([
-                button.heightAnchor.constraint(equalToConstant: 44),
-                button.widthAnchor.constraint(equalToConstant: 44)
-            ])
-        }
     }
     
     private func setupActions() {
-        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
-        signupButton.addTarget(self, action: #selector(signupButtonTapped), for: .touchUpInside)
-        facebookButton.addTarget(self, action: #selector(facebookButtonTapped), for: .touchUpInside)
-        googleButton.addTarget(self, action: #selector(googleButtonTapped), for: .touchUpInside)
-        appleButton.addTarget(self, action: #selector(appleButtonTapped), for: .touchUpInside)
+        appleSignInButton.addTarget(self, action: #selector(appleSignInButtonTapped), for: .touchUpInside)
+    }
+    
+    // MARK: - Apple Sign In
+    @objc private func appleSignInButtonTapped() {
+        performAppleSignIn()
+    }
+    
+    private func performAppleSignIn() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
         
-        // 添加点击手势，用于关闭键盘
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        
+        // 显示加载指示器
+        showLoadingIndicator()
+        
+        controller.performRequests()
     }
     
-    private func setupKeyboardHandling() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    private func checkExistingAppleIDCredential() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        
+        // 检查现有凭据，但不显示加载指示器
+        // controller.performRequests()
     }
     
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-        scrollView.contentInset = contentInsets
-        scrollView.scrollIndicatorInsets = contentInsets
+    private func showLoadingIndicator() {
+        activityIndicator.startAnimating()
+        appleSignInButton.isEnabled = false
     }
     
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        scrollView.contentInset = .zero
-        scrollView.scrollIndicatorInsets = .zero
+    private func hideLoadingIndicator() {
+        activityIndicator.stopAnimating()
+        appleSignInButton.isEnabled = true
     }
     
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
+    private func handleSuccessfulSignIn(userID: String, email: String?, fullName: PersonNameComponents?) {
+        // 存储用户信息
+        UserDefaults.standard.set(userID, forKey: "appleUserID")
+        UserDefaults.standard.set(email, forKey: "userEmail")
+        
+        if let fullName = fullName {
+            let displayName = PersonNameComponentsFormatter().string(from: fullName)
+            UserDefaults.standard.set(displayName, forKey: "userDisplayName")
+        }
+        
+        UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
+        
+        // 跳转到主页
+        DispatchQueue.main.async {
+            let homeVC = MainTabBarController()
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                window.rootViewController = homeVC
+                window.makeKeyAndVisible()
+            }
+        }
     }
     
-    @objc private func loginButtonTapped() {
-        // 简单验证
-        guard let email = emailTextField.text, !email.isEmpty,
-              let password = passwordTextField.text, !password.isEmpty else {
-            // 显示错误提示
-            let alert = UIAlertController(title: "輸入錯誤", message: "請輸入電子郵件和密碼", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "確定", style: .default))
-            present(alert, animated: true)
+    private func showError(message: String) {
+        let alert = UIAlertController(title: "登入失敗", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "確定", style: .default))
+        present(alert, animated: true)
+    }
+}
+
+// MARK: - ASAuthorizationControllerDelegate
+extension LoginViewController: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        hideLoadingIndicator()
+        
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            let userID = appleIDCredential.user
+            let email = appleIDCredential.email
+            let fullName = appleIDCredential.fullName
+            
+            print("Apple Sign In 成功")
+            print("User ID: \(userID)")
+            print("Email: \(email ?? "未提供")")
+            print("Full Name: \(fullName?.debugDescription ?? "未提供")")
+            
+            handleSuccessfulSignIn(userID: userID, email: email, fullName: fullName)
+            
+        default:
+            showError(message: "未知的認證類型")
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        hideLoadingIndicator()
+        
+        guard let authError = error as? ASAuthorizationError else {
+            showError(message: "認證過程中發生未知錯誤")
             return
         }
         
-        // 模拟登录成功，跳转到主页
-        let homeVC = MainTabBarController()
-        navigationController?.setViewControllers([homeVC], animated: true)
+        switch authError.code {
+        case .canceled:
+            print("用戶取消了Apple Sign In")
+        case .failed:
+            showError(message: "認證失敗，請重試")
+        case .invalidResponse:
+            showError(message: "認證響應無效")
+        case .notHandled:
+            showError(message: "認證請求未被處理")
+        case .unknown:
+            showError(message: "發生未知錯誤")
+        @unknown default:
+            showError(message: "發生未知錯誤")
+        }
     }
-    
-    @objc private func signupButtonTapped() {
-        let signupVC = SignupViewController()
-        navigationController?.pushViewController(signupVC, animated: true)
-    }
-    
-    @objc private func facebookButtonTapped() {
-        // 模拟Facebook登录
-        print("Facebook登录按钮点击")
-        let homeVC = MainTabBarController()
-        navigationController?.setViewControllers([homeVC], animated: true)
-    }
-    
-    @objc private func googleButtonTapped() {
-        // 模拟Google登录
-        print("Google登录按钮点击")
-        let homeVC = MainTabBarController()
-        navigationController?.setViewControllers([homeVC], animated: true)
-    }
-    
-    @objc private func appleButtonTapped() {
-        // 模拟Apple登录
-        print("Apple登录按钮点击")
-        let homeVC = MainTabBarController()
-        navigationController?.setViewControllers([homeVC], animated: true)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+}
+
+// MARK: - ASAuthorizationControllerPresentationContextProviding
+extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return view.window!
     }
 } 

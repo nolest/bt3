@@ -144,4 +144,122 @@ BabyTracker3/
 
 ## 聯繫方式
 
-如有問題或建議，請聯繫開發團隊。 
+如有問題或建議，請聯繫開發團隊。
+
+## 🍎 Apple登入功能
+
+本應用現在專門使用 **Sign in with Apple** 作為唯一的登入方式，為用戶提供最安全、最便捷的認證體驗。
+
+### ✨ 功能特點
+
+- **🔐 安全認證**: 使用Apple的雙重認證系統
+- **🛡️ 隱私保護**: 可選擇隱藏真實郵箱地址
+- **⚡ 快速登入**: 支持Face ID、Touch ID和設備密碼
+- **🔄 自動同步**: 登入狀態自動保存和恢復
+
+### 🚀 使用流程
+
+1. **首次使用**:
+   - 打開應用
+   - 點擊「使用Apple ID登入」按鈕
+   - 選擇是否分享姓名和郵箱
+   - 完成生物識別驗證
+   - 自動進入主界面
+
+2. **後續使用**:
+   - 應用會自動記住登入狀態
+   - 直接進入主界面，無需重複登入
+
+3. **退出登入**:
+   - 進入「設置」頁面
+   - 點擊「退出登入」按鈕
+   - 確認後返回登入頁面
+
+### 🛠️ 開發配置
+
+#### 1. Xcode項目配置
+
+在Xcode中啟用Sign in with Apple功能：
+
+1. 選擇項目target
+2. 進入「Signing & Capabilities」
+3. 點擊「+ Capability」
+4. 添加「Sign In with Apple」
+
+#### 2. Apple Developer Account配置
+
+1. 登入Apple Developer Console
+2. 在「Certificates, Identifiers & Profiles」中
+3. 配置App ID並啟用「Sign In with Apple」功能
+4. 創建相應的Provisioning Profile
+
+#### 3. 代碼實現
+
+主要組件：
+- `LoginViewController`: Apple登入界面
+- `SettingsViewController`: 用戶資訊和退出功能
+- `SceneDelegate`: 登入狀態檢查和頁面路由
+
+### 📱 用戶界面
+
+#### 登入頁面
+- 簡潔的Apple登入按鈕
+- 隱私保護說明
+- 美觀的UI設計
+
+#### 設置頁面
+- 用戶資訊卡片顯示
+- 寶寶資料設置
+- 數據管理功能
+- 退出登入選項
+
+### 🔒 數據安全
+
+- 用戶ID安全存儲在UserDefaults
+- 登入狀態持久化保存
+- 退出時完全清除用戶數據
+- 支持Apple的隱私保護功能
+
+### 🐛 錯誤處理
+
+應用處理以下登入錯誤情況：
+- 用戶取消登入
+- 網絡連接問題
+- 認證失敗
+- 無效響應
+
+### 📋 系統要求
+
+- iOS 13.0+
+- Xcode 12.0+
+- 已配置Apple Developer Account
+- 設備支持生物識別（推薦）
+
+### 🔮 未來計劃
+
+- [ ] 添加登入狀態檢查
+- [ ] 實現凭据狀態監控
+- [ ] 優化用戶體驗
+- [ ] 添加更多隱私選項
+
+---
+
+## 📦 項目結構
+
+```
+app/
+├── Views/
+│   ├── LoginViewController.swift       # Apple登入頁面
+│   ├── SettingsViewController.swift    # 設置和用戶管理
+│   ├── MainTabBarController.swift     # 主界面標籤欄
+│   └── ...
+├── Utils/
+│   └── Constants.swift                # UI常量定義
+├── Managers/
+│   └── DataManager.swift             # 數據管理
+└── ...
+```
+
+## 🤝 貢獻
+
+歡迎提交Issue和Pull Request來改進這個項目！ 
