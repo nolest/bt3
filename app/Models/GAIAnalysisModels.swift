@@ -284,7 +284,7 @@ struct MediaItem: Codable {
     let type: MediaType
     let createdAt: Date
     let fileSize: Int64
-    let thumbnailPath: String?
+    var thumbnailPath: String?
     var analysisStatus: AnalysisStatus
     var analysisResult: GAIAnalysisResult?
     let babyAge: Int? // 寶寶年齡（月數）
