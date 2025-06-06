@@ -118,7 +118,7 @@ class DataManager: ObservableObject {
         
         let feedingCount = todayRecords.filter { $0.type == .feeding }.count
         let sleepRecords = todayRecords.filter { $0.type == .sleeping }
-        let sleepHours = sleepRecords.compactMap { $0.duration }.reduce(0, +) / 60.0
+        let sleepHours = Double(sleepRecords.compactMap { $0.duration }.reduce(0, +)) / 60.0
         let diaperChanges = todayRecords.filter { $0.type == .diaper }.count
         let playRecords = todayRecords.filter { $0.type == .playing }
         let playTime = playRecords.compactMap { $0.duration }.reduce(0, +)
