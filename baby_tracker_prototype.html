@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寶貝成長記 - iOS應用原型</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .screen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .screen {
+            background: #1a1a1a;
+            border-radius: 30px;
+            width: 320px;
+            height: 640px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            border: 8px solid #1a1a1a;
+        }
+
+        .screen-inner {
+            background: white;
+            height: 100%;
+            border-radius: 22px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .status-bar {
+            height: 30px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .screen-content {
+            height: calc(100% - 30px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .screen-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .screen-footer {
+            background: white;
+            border-top: 1px solid #eee;
+            padding: 0;
+        }
+
+        /* 啟動頁面 */
+        .splash-screen .screen-content {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 64px;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .app-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .app-subtitle {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.5;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 30px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            animation: loading 1.4s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes loading {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* 登錄頁面 */
+        .welcome-icon {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .welcome-icon i {
+            font-size: 64px;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-text h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px 50px 18px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .input-group input:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .btn {
+            padding: 18px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            background: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        /* 主儀表板 */
+        .dashboard-greeting {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .baby-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .baby-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 28px;
+            box-shadow: 0 8px 25px rgba(255, 234, 167, 0.4);
+        }
+
+        .baby-details h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .baby-details p {
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .action-btn {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .action-btn i {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .action-btn span {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .feeding { color: #e17055; }
+        .sleeping { color: #6c5ce7; }
+        .diaper { color: #00b894; }
+        .play { color: #fdcb6e; }
+        .photo { color: #fd79a8; }
+        .medical { color: #74b9ff; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 習慣進度條 */
+        .habit-progress {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .habit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .habit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .habit-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .habit-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00b894, #00cec9);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            min-width: 40px;
+        }
+
+        /* 底部導航 */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background: white;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item span {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* 浮動按鈕 */
+        .fab {
+            position: absolute;
+            bottom: 90px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 記錄頁面 */
+        .record-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .record-icon {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .record-icon i {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        .record-icon h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .record-icon p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .record-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .form-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .time-picker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+        }
+
+        .time-display {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .duration-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e9ecef;
+            outline: none;
+            margin: 15px 0;
+        }
+
+        .duration-display {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 10px;
+        }
+
+        .option-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .option-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .option-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            resize: none;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .notes-textarea:focus {
+            border-color: #667eea;
+        }
+
+        /* 統計頁面 */
+        .stats-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .period-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .period-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .achievement-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .achievement-number {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .achievement-text {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            border: 2px dashed #ccc;
+        }
+
+        .chart-placeholder i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #999;
+        }
+
+        /* 里程碑頁面 */
+        .milestone-summary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .milestone-progress {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .milestone-section {
+            margin-bottom: 30px;
+        }
+
+        .milestone-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .milestone {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .milestone:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .milestone-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 20px;
+            color: white;
+            background: #ccc;
+        }
+
+        .milestone.completed .milestone-icon {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+        }
+
+        .milestone.in-progress .milestone-icon {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+        }
+
+        .milestone-content {
+            flex: 1;
+        }
+
+        .milestone-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .milestone-date {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .milestone-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .milestone.completed .milestone-badge {
+            background: #d4f5ef;
+            color: #00b894;
+        }
+
+        .milestone.in-progress .milestone-badge {
+            background: #fef2e8;
+            color: #e17055;
+        }
+
+        .milestone.pending .milestone-badge {
+            background: #f8f9fa;
+            color: #666;
+        }
+
+        /* 家庭頁面 */
+        .family-header {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .family-member {
+            display: flex;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .family-member:last-child {
+            border-bottom: none;
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .member-role {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .member-status {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-online {
+            background: #d4f5ef;
+            color: #00b894;
+        }
+
+        .status-offline {
+            background: #f8f9fa;
+            color: #666;
+        }
+
+        .activity-feed {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-text {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .activity-time {
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* 設置頁面 */
+        .settings-section {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .settings-header {
+            padding: 20px 25px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .settings-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item:hover {
+            background: #f8f9fa;
+        }
+
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            font-size: 18px;
+            color: white;
+        }
+
+        .settings-content {
+            flex: 1;
+        }
+
+        .settings-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .settings-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 24px;
+            background: #ccc;
+            border-radius: 24px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(26px);
+        }
+
+        /* 提醒頁面 */
+        .reminder-container {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .reminder-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .reminder-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .reminder-subtitle {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .time-since {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .time-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .time-label {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .time-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .habit-tracker {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .habit-grid {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+        }
+
+        .habit-item-mini {
+            text-align: center;
+        }
+
+        .habit-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: white;
+            font-size: 20px;
+        }
+
+        .habit-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .achievement-banner {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .screen-grid {
+                grid-template-columns: 1fr;
+                justify-items: center;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+
+        /* 屏幕標題 */
+        .screen-title {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 標題 -->
+        <div class="header">
+            <h1><i class="fas fa-baby"></i> 寶貝成長記</h1>
+            <p>基於《掌控習慣》原理的嬰兒成長記錄iOS應用原型設計</p>
+        </div>
+        
+        <div class="screen-grid">
+            <!-- 1. 啟動頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">啟動頁面</div>
+                <div class="screen-inner">
+                    <div class="screen-content splash-screen">
+                        <div class="logo">👶</div>
+                        <div class="app-title">寶貝成長記</div>
+                        <div class="app-subtitle">基於《掌控習慣》原理<br>記錄寶寶每一個珍貴時刻<br>養成良好的育兒習慣</div>
+                        <div class="loading-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 歡迎/登錄頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">登錄頁面</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="screen-body">
+                            <div class="welcome-icon">
+                                <i class="fas fa-heart"></i>
+                                <div class="welcome-text">
+                                    <h2>歡迎回來</h2>
+                                    <p>繼續記錄寶寶的成長時光</p>
+                                </div>
+                            </div>
+                            
+                            <div class="login-form">
+                                <div class="input-group">
+                                    <input type="email" placeholder="請輸入郵箱地址">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="input-group">
+                                    <input type="password" placeholder="請輸入密碼">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt"></i> 立即登錄
+                                </button>
+                                <button class="btn btn-secondary">註冊新帳戶</button>
+                            </div>
+
+                            <div class="social-login">
+                                <div class="social-btn">
+                                    <i class="fab fa-apple" style="font-size: 20px;"></i>
+                                </div>
+                                <div class="social-btn">
+                                    <i class="fab fa-google" style="font-size: 20px; color: #4285F4;"></i>
+                                </div>
+                                <div class="social-btn">
+                                    <i class="fab fa-wechat" style="font-size: 20px; color: #07C160;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 主儀表板 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">主儀表板</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="screen-body">
+                            <div class="dashboard-greeting">
+                                <div class="baby-info">
+                                    <div class="baby-avatar">👶</div>
+                                    <div class="baby-details">
+                                        <h3>小寶貝的一天</h3>
+                                        <p>3個月15天 • 今天表現很棒！</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="quick-actions">
+                                <div class="action-btn">
+                                    <i class="fas fa-baby-carriage feeding"></i>
+                                    <span>餵奶</span>
+                                </div>
+                                <div class="action-btn">
+                                    <i class="fas fa-bed sleeping"></i>
+                                    <span>睡覺</span>
+                                </div>
+                                <div class="action-btn">
+                                    <i class="fas fa-toilet-paper diaper"></i>
+                                    <span>換尿布</span>
+                                </div>
+                                <div class="action-btn">
+                                    <i class="fas fa-toys play"></i>
+                                    <span>玩耍</span>
+                                </div>
+                                <div class="action-btn">
+                                    <i class="fas fa-camera photo"></i>
+                                    <span>拍照</span>
+                                </div>
+                                <div class="action-btn">
+                                    <i class="fas fa-stethoscope medical"></i>
+                                    <span>健康</span>
+                                </div>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-number feeding">8</div>
+                                    <div class="stat-label">次餵奶</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number sleeping">14h</div>
+                                    <div class="stat-label">睡眠時間</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number diaper">6</div>
+                                    <div class="stat-label">換尿布</div>
+                                </div>
+                            </div>
+
+                            <div class="habit-progress">
+                                <h3 style="margin-bottom: 20px; font-size: 18px;">今日習慣進度</h3>
+                                <div class="habit-item">
+                                    <div class="habit-info">
+                                        <div class="habit-icon feeding" style="background: #e17055;">
+                                            <i class="fas fa-baby-carriage"></i>
+                                        </div>
+                                        <span>規律餵奶</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 85%;"></div>
+                                    </div>
+                                    <div class="progress-text">85%</div>
+                                </div>
+                                <div class="habit-item">
+                                    <div class="habit-info">
+                                        <div class="habit-icon sleeping" style="background: #6c5ce7;">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <span>睡眠規律</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 70%;"></div>
+                                    </div>
+                                    <div class="progress-text">70%</div>
+                                </div>
+                                <div class="habit-item">
+                                    <div class="habit-info">
+                                        <div class="habit-icon play" style="background: #fdcb6e;">
+                                            <i class="fas fa-toys"></i>
+                                        </div>
+                                        <span>互動玩耍</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 60%;"></div>
+                                    </div>
+                                    <div class="progress-text">60%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-footer">
+                            <div class="bottom-nav">
+                                <div class="nav-item active">
+                                    <i class="fas fa-home"></i>
+                                    <span>首頁</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>統計</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>里程碑</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>家庭</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-cog"></i>
+                                    <span>設置</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="fab"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 快速記錄頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">記錄頁面</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="record-header">
+                            <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+                            <span>餵奶記錄</span>
+                            <button class="back-btn"><i class="fas fa-check"></i></button>
+                        </div>
+                        <div class="screen-body">
+                            <div class="record-icon">
+                                <i class="fas fa-baby-carriage feeding"></i>
+                                <h2>記錄餵奶</h2>
+                                <p>建立規律的餵奶習慣，讓寶寶更健康</p>
+                            </div>
+
+                            <div class="record-form">
+                                <div class="form-group">
+                                    <label>開始時間</label>
+                                    <div class="time-picker">
+                                        <span>今天</span>
+                                        <div class="time-display">14:30</div>
+                                        <i class="fas fa-clock" style="color: #667eea;"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>持續時間</label>
+                                    <input type="range" class="duration-slider" min="5" max="60" value="25">
+                                    <div class="duration-display">25 分鐘</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>餵食方式</label>
+                                    <div class="option-buttons">
+                                        <button class="option-btn active">
+                                            <i class="fas fa-heart"></i><br>母乳
+                                        </button>
+                                        <button class="option-btn">
+                                            <i class="fas fa-baby-carriage"></i><br>奶粉
+                                        </button>
+                                        <button class="option-btn">
+                                            <i class="fas fa-plus"></i><br>混合
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>奶量 (ml)</label>
+                                    <div class="time-picker">
+                                        <span>估算奶量</span>
+                                        <div class="time-display">120ml</div>
+                                        <i class="fas fa-tint" style="color: #667eea;"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>備注與心情</label>
+                                    <textarea class="notes-textarea" rows="3" placeholder="記錄寶寶的反應和您的心情...&#10;例如：寶寶今天很乖，吃得很香 😊"></textarea>
+                                </div>
+
+                                <button class="btn btn-primary" style="margin-top: 10px;">
+                                    <i class="fas fa-save"></i> 保存記錄
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 統計分析頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">統計分析</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="screen-header">統計分析</div>
+                        <div class="screen-body">
+                            <div class="stats-header">
+                                <button class="period-btn active">今天</button>
+                                <button class="period-btn">本週</button>
+                                <button class="period-btn">本月</button>
+                            </div>
+
+                            <div class="achievement-card">
+                                <div class="achievement-number">87%</div>
+                                <div class="achievement-text">習慣完成度</div>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-number feeding">56</div>
+                                    <div class="stat-label">總餵奶次數</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number sleeping">16.5h</div>
+                                    <div class="stat-label">平均睡眠</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number diaper">42</div>
+                                    <div class="stat-label">換尿布次數</div>
+                                </div>
+                            </div>
+
+                            <div class="chart-container">
+                                <h3 style="margin-bottom: 20px;">本週餵奶趨勢</h3>
+                                <div class="chart-placeholder">
+                                    <i class="fas fa-chart-line"></i>
+                                    <div>餵奶頻率與時間圖表</div>
+                                    <small style="margin-top: 10px; opacity: 0.7;">顯示每日餵奶次數和時間間隔</small>
+                                </div>
+                            </div>
+
+                            <div class="habit-progress">
+                                <h3 style="margin-bottom: 20px;">習慣養成進度</h3>
+                                <div class="habit-item">
+                                    <div class="habit-info">
+                                        <div class="habit-icon" style="background: #00b894;">
+                                            <i class="fas fa-baby-carriage"></i>
+                                        </div>
+                                        <span>規律餵奶</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 90%;"></div>
+                                    </div>
+                                    <div class="progress-text">90%</div>
+                                </div>
+                                <div class="habit-item">
+                                    <div class="habit-info">
+                                        <div class="habit-icon" style="background: #fdcb6e;">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <span>睡眠規律</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 75%;"></div>
+                                    </div>
+                                    <div class="progress-text">75%</div>
+                                </div>
+                                <div class="habit-item">
+                                    <div class="habit-info">
+                                        <div class="habit-icon" style="background: #e17055;">
+                                            <i class="fas fa-toys"></i>
+                                        </div>
+                                        <span>互動時間</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 68%;"></div>
+                                    </div>
+                                    <div class="progress-text">68%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-footer">
+                            <div class="bottom-nav">
+                                <div class="nav-item">
+                                    <i class="fas fa-home"></i>
+                                    <span>首頁</span>
+                                </div>
+                                <div class="nav-item active">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>統計</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>里程碑</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>家庭</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-cog"></i>
+                                    <span>設置</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. 里程碑頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">成長里程碑</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="screen-header">成長里程碑</div>
+                        <div class="screen-body">
+                            <div class="milestone-summary">
+                                <i class="fas fa-trophy" style="font-size: 36px; margin-bottom: 15px;"></i>
+                                <div class="milestone-progress">已完成 12/20 個里程碑</div>
+                                <div>您的寶寶發展得很好！</div>
+                            </div>
+
+                            <div class="milestone-section">
+                                <h3>0-3個月</h3>
+                                
+                                <div class="milestone completed">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <div class="milestone-title">第一次微笑</div>
+                                        <div class="milestone-date">已完成 - 2個月前</div>
+                                    </div>
+                                    <div class="milestone-badge">已完成</div>
+                                </div>
+
+                                <div class="milestone completed">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <div class="milestone-title">能夠抬頭</div>
+                                        <div class="milestone-date">已完成 - 1個月前</div>
+                                    </div>
+                                    <div class="milestone-badge">已完成</div>
+                                </div>
+
+                                <div class="milestone in-progress">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-hourglass-half"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <div class="milestone-title">學會翻身</div>
+                                        <div class="milestone-date">進行中 - 預計還需2週</div>
+                                    </div>
+                                    <div class="milestone-badge">進行中</div>
+                                </div>
+                            </div>
+
+                            <div class="milestone-section">
+                                <h3>3-6個月</h3>
+                                
+                                <div class="milestone pending">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <div class="milestone-title">獨立坐立</div>
+                                        <div class="milestone-date">預計 5-6個月時達成</div>
+                                    </div>
+                                    <div class="milestone-badge">待完成</div>
+                                </div>
+
+                                <div class="milestone pending">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <div class="milestone-title">開始爬行</div>
+                                        <div class="milestone-date">預計 6-7個月時達成</div>
+                                    </div>
+                                    <div class="milestone-badge">待完成</div>
+                                </div>
+
+                                <div class="milestone pending">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <div class="milestone-title">說出第一個詞</div>
+                                        <div class="milestone-date">預計 8-10個月時達成</div>
+                                    </div>
+                                    <div class="milestone-badge">待完成</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-footer">
+                            <div class="bottom-nav">
+                                <div class="nav-item">
+                                    <i class="fas fa-home"></i>
+                                    <span>首頁</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>統計</span>
+                                </div>
+                                <div class="nav-item active">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>里程碑</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>家庭</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-cog"></i>
+                                    <span>設置</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. 家庭分享頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">家庭分享</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="screen-header">家庭分享</div>
+                        <div class="screen-body">
+                            <div class="family-header">
+                                <h3 style="margin-bottom: 20px;">家庭成員</h3>
+                                
+                                <div class="family-member">
+                                    <div class="member-avatar" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="member-info">
+                                        <div class="member-name">媽媽 (張小美)</div>
+                                        <div class="member-role">管理員 • 主要照顧者</div>
+                                    </div>
+                                    <div class="member-status status-online">在線</div>
+                                </div>
+
+                                <div class="family-member">
+                                    <div class="member-avatar" style="background: linear-gradient(135deg, #74b9ff, #0984e3);">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="member-info">
+                                        <div class="member-name">爸爸 (李大明)</div>
+                                        <div class="member-role">成員 • 協助照顧</div>
+                                    </div>
+                                    <div class="member-status status-offline">2小時前</div>
+                                </div>
+
+                                <div class="family-member">
+                                    <div class="member-avatar" style="background: linear-gradient(135deg, #fd79a8, #e84393);">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="member-info">
+                                        <div class="member-name">奶奶 (李老太)</div>
+                                        <div class="member-role">成員 • 偶爾照顧</div>
+                                    </div>
+                                    <div class="member-status status-offline">昨天</div>
+                                </div>
+                            </div>
+
+                            <div class="activity-feed">
+                                <h3 style="margin-bottom: 20px;">最近活動</h3>
+                                
+                                <div class="activity-item">
+                                    <div class="activity-text">
+                                        <strong>媽媽</strong> 記錄了餵奶 (120ml 母乳)
+                                    </div>
+                                    <div class="activity-time">30分鐘前</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-text">
+                                        <strong>爸爸</strong> 記錄了換尿布
+                                    </div>
+                                    <div class="activity-time">2小時前</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-text">
+                                        <strong>媽媽</strong> 上傳了一張可愛的照片 📸
+                                    </div>
+                                    <div class="activity-time">3小時前</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-text">
+                                        <strong>奶奶</strong> 記錄了玩耍時間 (30分鐘)
+                                    </div>
+                                    <div class="activity-time">昨天</div>
+                                </div>
+
+                                <div class="activity-item">
+                                    <div class="activity-text">
+                                        <strong>爸爸</strong> 完成了睡前故事記錄
+                                    </div>
+                                    <div class="activity-time">昨天</div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                                <i class="fas fa-user-plus"></i> 邀請新成員加入
+                            </button>
+
+                            <div style="background: #f0f3ff; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center;">
+                                <i class="fas fa-share-alt" style="font-size: 24px; color: #667eea; margin-bottom: 10px;"></i>
+                                <div style="font-size: 14px; color: #666;">
+                                    邀請碼：<strong style="color: #667eea;">BT2024</strong><br>
+                                    分享給家人即可加入
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-footer">
+                            <div class="bottom-nav">
+                                <div class="nav-item">
+                                    <i class="fas fa-home"></i>
+                                    <span>首頁</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>統計</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>里程碑</span>
+                                </div>
+                                <div class="nav-item active">
+                                    <i class="fas fa-users"></i>
+                                    <span>家庭</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-cog"></i>
+                                    <span>設置</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. 設置頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">設置頁面</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="screen-header">設置</div>
+                        <div class="screen-body">
+                            <div class="settings-section">
+                                <div class="settings-header">
+                                    <h3>寶寶信息</h3>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="baby-avatar" style="width: 50px; height: 50px; font-size: 20px; margin-right: 15px;">👶</div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">小寶貝</div>
+                                        <div class="settings-subtitle">2024年9月15日出生 • 男寶寶</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right" style="color: #ccc;"></i>
+                                </div>
+                            </div>
+
+                            <div class="settings-section">
+                                <div class="settings-header">
+                                    <h3>提醒設置</h3>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #e17055;">
+                                        <i class="fas fa-baby-carriage"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">餵奶提醒</div>
+                                        <div class="settings-subtitle">每3小時提醒一次</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #6c5ce7;">
+                                        <i class="fas fa-bed"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">睡眠提醒</div>
+                                        <div class="settings-subtitle">每晚8:00提醒睡前準備</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #00b894;">
+                                        <i class="fas fa-toilet-paper"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">換尿布提醒</div>
+                                        <div class="settings-subtitle">根據記錄智能提醒</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                            </div>
+
+                            <div class="settings-section">
+                                <div class="settings-header">
+                                    <h3>數據與隱私</h3>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #74b9ff;">
+                                        <i class="fas fa-download"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">導出數據</div>
+                                        <div class="settings-subtitle">將記錄導出為PDF或Excel</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right" style="color: #ccc;"></i>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #fdcb6e;">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">隱私設置</div>
+                                        <div class="settings-subtitle">管理數據共享權限</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right" style="color: #ccc;"></i>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #fd79a8;">
+                                        <i class="fas fa-cloud"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">雲端備份</div>
+                                        <div class="settings-subtitle">自動備份到iCloud</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                            </div>
+
+                            <div class="settings-section">
+                                <div class="settings-header">
+                                    <h3>幫助與支持</h3>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #55a3ff;">
+                                        <i class="fas fa-question-circle"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">使用幫助</div>
+                                        <div class="settings-subtitle">常見問題與使用指南</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right" style="color: #ccc;"></i>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #a29bfe;">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">評價應用</div>
+                                        <div class="settings-subtitle">在App Store中評價</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right" style="color: #ccc;"></i>
+                                </div>
+                                <div class="settings-item">
+                                    <div class="settings-icon" style="background: #e17055;">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                    </div>
+                                    <div class="settings-content">
+                                        <div class="settings-title">退出登錄</div>
+                                        <div class="settings-subtitle">安全退出當前帳戶</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right" style="color: #e17055;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="screen-footer">
+                            <div class="bottom-nav">
+                                <div class="nav-item">
+                                    <i class="fas fa-home"></i>
+                                    <span>首頁</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>統計</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>里程碑</span>
+                                </div>
+                                <div class="nav-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>家庭</span>
+                                </div>
+                                <div class="nav-item active">
+                                    <i class="fas fa-cog"></i>
+                                    <span>設置</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. 習慣養成提醒頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">智能提醒</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="screen-header">智能提醒</div>
+                        <div class="screen-body">
+                            <div class="reminder-container">
+                                <div class="reminder-icon">
+                                    <i class="fas fa-bell" style="color: #667eea;"></i>
+                                </div>
+                                <div class="reminder-title">該餵奶了！</div>
+                                <div class="reminder-subtitle">
+                                    根據《掌控習慣》原理<br>
+                                    規律的暗示有助於建立良好習慣
+                                </div>
+                            </div>
+
+                            <div class="time-since">
+                                <div class="time-icon">🍼</div>
+                                <div class="time-label">距離上次餵奶</div>
+                                <div class="time-value">3小時15分</div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" style="flex: 1;">
+                                    <i class="fas fa-check"></i> 現在餵奶
+                                </button>
+                                <button class="btn btn-secondary" style="flex: 1;">
+                                    <i class="fas fa-clock"></i> 延後10分鐘
+                                </button>
+                            </div>
+
+                            <div class="habit-tracker">
+                                <h3 style="margin-bottom: 20px; text-align: center;">今日習慣進度</h3>
+                                <div class="habit-grid">
+                                    <div class="habit-item-mini">
+                                        <div class="habit-circle" style="background: #00b894;">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="habit-label">餵奶 8/8</div>
+                                    </div>
+                                    <div class="habit-item-mini">
+                                        <div class="habit-circle" style="background: #fdcb6e;">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <div class="habit-label">睡眠 3/4</div>
+                                    </div>
+                                    <div class="habit-item-mini">
+                                        <div class="habit-circle" style="background: #e17055;">
+                                            <i class="fas fa-times"></i>
+                                        </div>
+                                        <div class="habit-label">玩耍 1/3</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="achievement-banner">
+                                    <i class="fas fa-trophy" style="margin-right: 10px;"></i>
+                                    <strong>太棒了！</strong> 連續完成規律餵奶 7 天！
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. 成長相冊頁面 -->
+            <div class="screen" style="position: relative;">
+                <div class="screen-title">成長相冊</div>
+                <div class="screen-inner">
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span>📶 🔋</span>
+                    </div>
+                    <div class="screen-content">
+                        <div class="record-header">
+                            <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+                            <span>成長相冊</span>
+                            <button class="back-btn"><i class="fas fa-share"></i></button>
+                        </div>
+                        <div class="screen-body">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                                <div style="aspect-ratio: 1; background: linear-gradient(135deg, #ffeaa7, #fab1a0); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; position: relative; overflow: hidden;">
+                                    📸
+                                    <div style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; padding: 8px; border-radius: 8px; font-size: 12px; text-align: center;">
+                                        第一次微笑
+                                    </div>
+                                </div>
+                                <div style="aspect-ratio: 1; background: linear-gradient(135deg, #74b9ff, #0984e3); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; position: relative; overflow: hidden;">
+                                    👶
+                                    <div style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; padding: 8px; border-radius: 8px; font-size: 12px; text-align: center;">
+                                        學會抬頭
+                                    </div>
+                                </div>
+                                <div style="aspect-ratio: 1; background: linear-gradient(135deg, #fd79a8, #e84393); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; position: relative; overflow: hidden;">
+                                    🍼
+                                    <div style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; padding: 8px; border-radius: 8px; font-size: 12px; text-align: center;">
+                                        第一次餵奶
+                                    </div>
+                                </div>
+                                <div style="aspect-ratio: 1; background: linear-gradient(135deg, #55a3ff, #003d82); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; position: relative; overflow: hidden;">
+                                    😊
+                                    <div style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; padding: 8px; border-radius: 8px; font-size: 12px; text-align: center;">
+                                        開心玩耍
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                                <h3 style="margin-bottom: 20px; display: flex; align-items: center;">
+                                    <i class="fas fa-clock" style="margin-right: 10px; color: #667eea;"></i>
+                                    最新記錄
+                                </h3>
+                                
+                                <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; margin-right: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                        📸
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">第一次翻身嘗試</div>
+                                        <div style="color: #999; font-size: 14px;">今天 14:30 • 媽媽記錄</div>
+                                        <div style="color: #666; font-size: 14px; margin-top: 5px;">寶寶今天嘗試翻身，雖然沒有成功但已經很努力了！ 💪</div>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #00b894, #00cec9); border-radius: 12px; margin-right: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                        👶
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">可愛的睡姿</div>
+                                        <div style="color: #999; font-size: 14px;">昨天 20:15 • 爸爸記錄</div>
+                                        <div style="color: #666; font-size: 14px; margin-top: 5px;">小天使安靜地睡著了，太可愛了！ 😴</div>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; align-items: center;">
+                                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #fdcb6e, #e17055); border-radius: 12px; margin-right: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                        🎈
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">滿月紀念</div>
+                                        <div style="color: #999; font-size: 14px;">一週前 • 全家記錄</div>
+                                        <div style="color: #666; font-size: 14px; margin-top: 5px;">我們的小寶貝滿月了！全家一起慶祝 🎉</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 15px;">
+                                <button class="btn btn-primary" style="flex: 1;">
+                                    <i class="fas fa-camera"></i> 添加照片
+                                </button>
+                                <button class="btn btn-secondary" style="flex: 1;">
+                                    <i class="fas fa-video"></i> 錄製視頻
+                                </button>
+                            </div>
+                        </div>
+                        <button class="fab"><i class="fas fa-camera"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 簡單的交互效果
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-5px)';
+                }, 150);
+            });
+        });
+
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.period-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 滑塊交互
+        document.querySelectorAll('.duration-slider').forEach(slider => {
+            slider.addEventListener('input', function() {
+                const value = this.value;
+                const display = this.parentElement.querySelector('.duration-display');
+                if (display) {
+                    display.textContent = value + ' 分鐘';
+                }
+            });
+        });
+
+        // 添加懸停效果
+        document.querySelectorAll('.milestone').forEach(milestone => {
+            milestone.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px)';
+            });
+            milestone.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // 添加FAB點擊效果
+        document.querySelectorAll('.fab').forEach(fab => {
+            fab.addEventListener('click', function() {
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
